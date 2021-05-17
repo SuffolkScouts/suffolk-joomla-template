@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install PUBLIC "-//Joomla! 2.5//DTD template 1.0//EN" "http://www.joomla.org/xml/dtd/2.5/template-install.dtd">
+<extension version="3.1" type="template" client="site" method="upgrade">
+    <name>Suffolk Bootstrap</name>
+    <version>0.1</version>
+    <creationDate>June 2020</creationDate>
+    <author>Rob Gloess</author>
+    <authorEmail>amin@suffolkscouts.org.uk</authorEmail>
+    <copyright>Copyright (C) 2020 Suffolk Scouts</copyright>
+    <description>TPL_BOOTSTRAP4_XML_DESCRIPTION</description>
+    <files>
+        <filename>component.php</filename>
+        <filename>error.php</filename>
+        <filename>favicon.ico</filename>
+        <filename>index.php</filename>
+        <filename>templateDetails.xml</filename>
+        <filename>template_preview.png</filename>
+        <filename>template_thumbnail.png</filename>
+        <folder>css</folder>
+        <folder>fonts</folder>
+        <folder>html</folder>
+        <folder>images</folder>
+        <folder>js</folder>
+        <folder>language</folder>
+    </files>
+    <positions>
+        <position>banner</position>
+        <position>debug</position>
+        <position>breadcrumbs</position>
+        <position>sidebar-left</position>
+        <position>sidebar-right</position>
+        <position>navbar-1</position>
+        <position>user-menu</position>
+        <position>contributors</position>
+        <position>above-content</position>
+        <position>below-content</position>
+        <position>position-8</position>
+        <position>position-9</position>
+        <position>position-10</position>
+        <position>position-11</position>
+        <position>position-12</position>
+        <position>position-13</position>
+        <position>position-14</position>
+        <position>footer</position>
+    </positions>
+    <config>
+        <fields name="params">
+            <fieldset name="advanced">
+                <field name="sitedescription"  type="text" default=""
+					label="JGLOBAL_DESCRIPTION"
+					description="JGLOBAL_SUBHEADING_DESC"
+					filter="string" />
+                <field name="favicon" class="" type="text" default=""
+					label="TPL_BOOTSTRAP4_FAVICON"
+					description="TPL_BOOTSTRAP4_FAVICON_DESC" />
+                <field name="customcss" class="" type="text" default=""
+					label="TPL_BOOTSTRAP4_CUSTOMCSS"
+					description="TPL_BOOTSTRAP4_CUSTOMCSS_DESC" />
+		<field name="fluidContainer"
+					type="radio"
+					label="TPL_BOOTSTRAP4_FLUID_LABEL"
+					description="TPL_BOOTSTRAP4_FLUID_DESC"
+					class="btn-group btn-group-yesno"
+					default="0"
+					>
+					<option value="1">TPL_BOOTSTRAP4_FLUID</option>
+					<option value="0">TPL_BOOTSTRAP4_STATIC</option>
+				</field>
+            </fieldset>
+        </fields>
+    </config>
+</extension>
