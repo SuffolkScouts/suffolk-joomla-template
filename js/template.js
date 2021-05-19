@@ -1,7 +1,4 @@
 
-
-
-
 (function($)
 {
       $(window).on("load resize", function() {
@@ -9,13 +6,11 @@
             if (this.matchMedia("(min-width: 768px)").matches) {
                   jQuery(".dropdown").hover(
                         function() {
-                              //const $this = $(this);
                               jQuery(this).addClass("show");
                               jQuery(this).find(".dropdown-toggle:first").attr("aria-expanded", "true");
                               jQuery(this).find(".dropdown-menu:first").addClass("show");
                         },
                         function() {
-                              //const $this = $(this);
                               jQuery(this).removeClass("show");
                               jQuery(this).find(".dropdown-toggle").attr("aria-expanded", "false");
                               jQuery(this).find(".dropdown-menu").removeClass("show");
@@ -26,7 +21,9 @@
             }
       });
       
-      $('.dropdown-menu a.dropdown-toggle').on('click', function(e) {
+      $('a.dropdown-toggle').on('click', function(e) {
+
+            // e.preventDefault();
             if (!$(this).next().hasClass('show')) {
                   $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
             }
@@ -37,7 +34,6 @@
             $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
                   $('.dropdown-submenu .show').removeClass("show");
             });
-      
       
             return false;
       });

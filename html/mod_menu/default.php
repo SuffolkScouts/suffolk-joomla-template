@@ -66,7 +66,7 @@ foreach ($list as $i => &$item)
 		$class .= ' deeper';
 		$class .= " dropdown";
 		$item->anchor_css .= " dropdown-toggle";
-		$item->data = 'data-toggle="dropdown"';
+		// $item->data = 'data-toggle="dropdown"';
 	}
 
 	if($depth == 0)
