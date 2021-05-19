@@ -3,7 +3,7 @@
 {
       $(window).on("load resize", function() {
 
-            if (this.matchMedia("(min-width: 768px)").matches) {
+            if (this.matchMedia("(min-width: 991.98px)").matches) {
                   jQuery(".dropdown").hover(
                         function() {
                               jQuery(this).addClass("show");
@@ -22,20 +22,21 @@
       });
       
       $('a.dropdown-toggle').on('click', function(e) {
+            if (this.matchMedia("(max-width: 991.98px)").matches) {
 
-            // e.preventDefault();
-            if (!$(this).next().hasClass('show')) {
-                  $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+                  if (!$(this).next().hasClass('show')) {
+                        $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+                  }
+                  var $subMenu = $(this).next(".dropdown-menu");
+                  $subMenu.toggleClass('show');
+            
+            
+                  $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
+                        $('.dropdown-submenu .show').removeClass("show");
+                  });
+            
+                  return false;
             }
-            var $subMenu = $(this).next(".dropdown-menu");
-            $subMenu.toggleClass('show');
-      
-      
-            $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
-                  $('.dropdown-submenu .show').removeClass("show");
-            });
-      
-            return false;
       });
 
 	$(document).ready(function()
