@@ -155,6 +155,11 @@ li.breadcrumb-item a:hover {
     margin-right: .05rem;
 }
 
+.dropdown-reverse{ 
+    left:auto!important; 
+    right:100%!important;
+}
+
 /* Mobile Dropdown Styling */
 @media (max-width: 991.98px) { 
     .dropdown-menu {
