@@ -22,7 +22,7 @@
       });
       
       $('a.dropdown-toggle').on('click', function(e) {
-            if (this.matchMedia("(max-width: 991.98px)").matches) {
+            if (window.matchMedia("(max-width: 991.98px)").matches) {
 
                   if (!$(this).next().hasClass('show')) {
                         $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
@@ -38,6 +38,27 @@
                   return false;
             }
       });
+
+      //Change position for drop down
+      $(".dropdown li").on('mouseenter mouseleave', function (e) {
+          if ($('.dropdown-menu', this).length) {
+              var elm = $('.dropdown-menu', this);
+              var off = elm.offset();
+              var l = off.left;
+              var w = elm.width();
+              var docW = $(window).width();
+  
+              var isEntirelyVisible = (l + w <= docW);
+  
+              if (!isEntirelyVisible) {
+                  $(elm).addClass('dropdown-reverse');
+              } 
+            //   else {
+            //       $(elm).removeClass('dropdown-reverse');
+            //   }
+          }
+      });
+
 
 	$(document).ready(function()
 	{
