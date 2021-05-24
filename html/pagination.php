@@ -112,7 +112,7 @@ function pagination_list_render($list)
 		}
 	}
 
-	$html = '<ul class="pagination">';
+	$html = '<ul class="pagination col-md-auto">';
 	$html .= $list['start']['data'];
 	$html .= $list['previous']['data'];
 
