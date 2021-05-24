@@ -238,6 +238,49 @@ html {
     font-size: 0.75rem;
 }
 
+/* JEvents Modules */
+/* This is a bit of a hack to not use proper BS styles, but editing the module is a PITA! */
+.mod_events_latest_table tbody {
+    --grid-gutter-x: 1.5rem;
+    --grid-gutter-y: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: calc(var(--grid-gutter-y) * -1);
+    margin-right: calc(var(--grid-gutter-x)/ -2);
+    margin-left: calc(var(--grid-gutter-x)/ -2);
+}
+.mod_events_latest_table tbody > * {
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+    padding-right: calc(var(--grid-gutter-x)/ 2);
+    padding-left: calc(var(--grid-gutter-x)/ 2);
+    margin-top: var(--grid-gutter-y);
+}
+.mod_events_latest_table tbody tr { 
+    flex: 0 0 auto;
+    width: 33.333333%;
+    border: none;
+}
+@media (max-width: 991.98px) { 
+    .mod_events_latest_table tbody tr { 
+        width: 50%;
+    }
+}
+@media (max-width: 768px) { 
+    .mod_events_latest_table tbody tr { 
+        width: 100%;
+    }
+}
+
+.mod_events_latest_table tbody tr td { 
+    border: none;
+}
+.mod_events_latest_table span.mod_events_latest_date {
+    font-weight: 700;
+}
+
+
 /* Typeography */
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
     font-weight: 800;
