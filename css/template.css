@@ -222,6 +222,21 @@ html {
     padding: 0;
 }
 
+/* News Page */
+.news .page-header h2 a {
+    text-decoration: none;
+    color: #000;
+}
+
+.news .items-row {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+}
+
+.news .article-info {
+    font-size: 0.75rem;
+}
 
 /* Typeography */
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
