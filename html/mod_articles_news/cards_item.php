@@ -29,10 +29,12 @@ defined('_JEXEC') or die;
 <div class="col mb-4">
     <div class="newflash-item card border-0">
 		<a href="<?php echo $item->link; ?>"><?php echo($itemHeader); ?></a>
-		<!-- <a href="<?php echo $item->link; ?>"><img src="<?php echo $item->imageSrc; ?>" class="card-img-top" alt="<?php echo $item->imageAlt; ?>"></a> -->
       	<div class="card-body bg-light">
 	  		<a href="<?php echo $item->link; ?>" class="text-body text-decoration-none"><h5 class="card-title"><?php echo $item->title; ?></h5></a>
         	<p class="card-text"><?php echo $item->introtext; ?></p>
-      </div>
+			<?php if (isset($item->link) && $item->readmore != 0 && $params->get('readmore')) : ?>
+				<?php echo '<p class="text-right mb-0"><a class="readmore text-decoration-none" href="' . $item->link . '">Read More &nbsp;<span class="fa fa-chevron-right"></span></a></p>'; ?>
+			<?php endif; ?>
+      	</div>
     </div>
 </div>
