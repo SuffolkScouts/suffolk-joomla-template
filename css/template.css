@@ -238,6 +238,18 @@ html {
     font-size: 0.75rem;
 }
 
+.news .item-image {
+    width: 250px;
+}
+
+.news .item-image img {
+    padding: .25rem;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    max-width: 100%;
+    height: auto;
+}
+
 /* JEvents Modules */
 /* This is a bit of a hack to not use proper BS styles, but editing the module is a PITA! */
 .mod_events_latest_table tbody {
