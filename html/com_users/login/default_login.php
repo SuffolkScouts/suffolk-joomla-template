@@ -79,20 +79,13 @@ JHtml::_('behavior.keepalive');
 <div class="login">
 	<ul class="nav nav-pills nav-fill">
 		<li class="nav-item">
-			<a class="nav-link" href="<?php echo JRoute::_('index.php?option=com_users&view=reset'); ?>">
-			<?php echo JText::_('COM_USERS_LOGIN_RESET'); ?></a>
+			<a class="nav-link" href="https://account.suffolkscouts.org.uk/forgotUsername">Forgot Username?</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="<?php echo JRoute::_('index.php?option=com_users&view=remind'); ?>">
-			<?php echo JText::_('COM_USERS_LOGIN_REMIND'); ?></a>
+			<a class="nav-link" href="https://account.suffolkscouts.org.uk/forgotPassword">Forgot Password?</a>
 		</li>
-		<?php
-		$usersConfig = JComponentHelper::getParams('com_users');
-		if ($usersConfig->get('allowUserRegistration')) : ?>
 		<li class="nav-item">
-			<a class="nav-link" href="<?php echo JRoute::_('index.php?option=com_users&view=registration'); ?>">
-				<?php echo JText::_('COM_USERS_LOGIN_REGISTER'); ?></a>
+			<a class="nav-link" href="https://account.suffolkscouts.org.uk/request">Request an account</a>
 		</li>
-		<?php endif; ?>
 	</ul>
 </div>
