@@ -290,8 +290,12 @@ html {
 }
 .mod_events_latest_table span.mod_events_latest_date {
     font-weight: 700;
+    font-size: 1.1em;
 }
 
+.mod_events_latest_content a {
+    color: #fff;
+}
 
 /* Typeography */
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
