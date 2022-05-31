@@ -235,8 +235,8 @@ if ($this->countModules('sidebar-left') && $this->countModules('sidebar-right'))
                 
                 <div class="row font-weight-light mt-4" style="font-size: 0.8em;">
                     <div class="col-sm-4">
-                        <a href="#" class="text-white">Privacy Policy</a> &nbsp;
-                        <a href="#" class="text-white">Data Protection</a>
+                        <a href="https://www.suffolkscouts.org.uk/contact-us/web-admin/website-privacy-statement" class="text-white">Privacy Policy</a> &nbsp;
+                        <a href="https://www.suffolkscouts.org.uk/contact-us/web-admin/data-protection-policy" class="text-white">Data Protection</a>
                     </div>
                     <div class="col-sm-4 text-center ">
                         &copy; 2011 - <?php echo date('Y'); ?> Suffolk County Scout Council. All Rights Reserved.
