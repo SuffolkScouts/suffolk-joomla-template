@@ -214,9 +214,10 @@ if ($this->countModules('sidebar-left') && $this->countModules('sidebar-right'))
                         </div> 
 
                         <address style="font-size: 0.9em;">
-                            <strong>County Office:</strong> <br/>
-                            143 Cauldwell Hall Rd <br />
-                            Ipswich, Suffolk IP4 5BS
+                            <strong>Suffolk Scouts County Office</strong> <br/>
+                            Hallowtree Scout Activity Centre <br />
+                            Alnesbourne Priory<br />
+                            Nacton, Ipswich, Suffolk IP10 0JP
                         </address>
 
                         <p style="font-size: 0.9em;">
