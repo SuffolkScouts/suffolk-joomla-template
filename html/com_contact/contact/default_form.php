@@ -9,6 +9,10 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+
 JHtml::_('behavior.keepalive');
 JHtml::_('behavior.formvalidator');
 
@@ -70,12 +74,12 @@ if (isset($this->error)) : ?>
 				<?php endif; ?>
 			<?php endforeach; ?>
 			<div class="form-actions">
-				<button class="btn btn-primary validate" type="submit"><i class="fa fa-envelope"></i> <?php echo JText::_('COM_CONTACT_CONTACT_SEND'); ?></button>
-				<input type="hidden" name="option" value="com_contact" />
-				<input type="hidden" name="task" value="contact.submit" />
-				<input type="hidden" name="return" value="<?php echo $this->return_page; ?>" />
-				<input type="hidden" name="id" value="<?php echo $this->contact->slug; ?>" />
-				<?php echo JHtml::_('form.token'); ?>
+				<button class="btn btn-primary validate" type="submit"><?php echo Text::_('COM_CONTACT_CONTACT_SEND'); ?></button>
+                <input type="hidden" name="option" value="com_contact">
+                <input type="hidden" name="task" value="contact.submit">
+                <input type="hidden" name="return" value="<?php echo $this->return_page; ?>">
+                <input type="hidden" name="id" value="<?php echo $this->item->slug; ?>">
+                <?php echo HTMLHelper::_('form.token'); ?>
 			</div>
 		</fieldset>
 	</form>
