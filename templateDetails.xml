@@ -2,10 +2,10 @@
 <!DOCTYPE install PUBLIC "-//Joomla! 2.5//DTD template 1.0//EN" "http://www.joomla.org/xml/dtd/2.5/template-install.dtd">
 <extension version="3.1" type="template" client="site" method="upgrade">
     <name>Suffolk Bootstrap</name>
-    <version>0.1</version>
+    <version>1.1</version>
     <creationDate>June 2020</creationDate>
     <author>Rob Gloess</author>
-    <authorEmail>amin@suffolkscouts.org.uk</authorEmail>
+    <authorEmail>admin@suffolkscouts.org.uk</authorEmail>
     <copyright>Copyright (C) 2020 Suffolk Scouts</copyright>
     <description>TPL_BOOTSTRAP4_XML_DESCRIPTION</description>
     <files>
@@ -46,26 +46,26 @@
     <config>
         <fields name="params">
             <fieldset name="advanced">
-                <field name="sitedescription"  type="text" default=""
-					label="JGLOBAL_DESCRIPTION"
-					description="JGLOBAL_SUBHEADING_DESC"
-					filter="string" />
+                <field name="sitedescription" type="text" default=""
+                    label="JGLOBAL_DESCRIPTION"
+                    description="JGLOBAL_SUBHEADING_DESC"
+                    filter="string" />
                 <field name="favicon" class="" type="text" default=""
-					label="TPL_BOOTSTRAP4_FAVICON"
-					description="TPL_BOOTSTRAP4_FAVICON_DESC" />
+                    label="TPL_BOOTSTRAP4_FAVICON"
+                    description="TPL_BOOTSTRAP4_FAVICON_DESC" />
                 <field name="customcss" class="" type="text" default=""
-					label="TPL_BOOTSTRAP4_CUSTOMCSS"
-					description="TPL_BOOTSTRAP4_CUSTOMCSS_DESC" />
-		<field name="fluidContainer"
-					type="radio"
-					label="TPL_BOOTSTRAP4_FLUID_LABEL"
-					description="TPL_BOOTSTRAP4_FLUID_DESC"
-					class="btn-group btn-group-yesno"
-					default="0"
-					>
-					<option value="1">TPL_BOOTSTRAP4_FLUID</option>
-					<option value="0">TPL_BOOTSTRAP4_STATIC</option>
-				</field>
+                    label="TPL_BOOTSTRAP4_CUSTOMCSS"
+                    description="TPL_BOOTSTRAP4_CUSTOMCSS_DESC" />
+                <field name="fluidContainer"
+                    type="radio"
+                    label="TPL_BOOTSTRAP4_FLUID_LABEL"
+                    description="TPL_BOOTSTRAP4_FLUID_DESC"
+                    class="btn-group btn-group-yesno"
+                    default="0"
+                >
+                    <option value="1">TPL_BOOTSTRAP4_FLUID</option>
+                    <option value="0">TPL_BOOTSTRAP4_STATIC</option>
+                </field>
             </fieldset>
         </fields>
     </config>
