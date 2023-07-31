@@ -9,26 +9,29 @@
 
 defined('_JEXEC') or die;
 
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\FileLayout;
+use Joomla\CMS\Layout\LayoutHelper;
 
-JHtml::_('behavior.caption');
-
-$dispatcher = JEventDispatcher::getInstance();
+$app = Factory::getApplication();
 
 $this->category->text = $this->category->description;
-$dispatcher->trigger('onContentPrepare', array($this->category->extension . '.categories', &$this->category, &$this->params, 0));
+$app->triggerEvent('onContentPrepare', [$this->category->extension . '.categories', &$this->category, &$this->params, 0]);
 $this->category->description = $this->category->text;
 
-$results = $dispatcher->trigger('onContentAfterTitle', array($this->category->extension . '.categories', &$this->category, &$this->params, 0));
+$results = $app->triggerEvent('onContentAfterTitle', [$this->category->extension . '.categories', &$this->category, &$this->params, 0]);
 $afterDisplayTitle = trim(implode("\n", $results));
 
-$results = $dispatcher->trigger('onContentBeforeDisplay', array($this->category->extension . '.categories', &$this->category, &$this->params, 0));
+$results = $app->triggerEvent('onContentBeforeDisplay', [$this->category->extension . '.categories', &$this->category, &$this->params, 0]);
 $beforeDisplayContent = trim(implode("\n", $results));
 
-$results = $dispatcher->trigger('onContentAfterDisplay', array($this->category->extension . '.categories', &$this->category, &$this->params, 0));
+$results = $app->triggerEvent('onContentAfterDisplay', [$this->category->extension . '.categories', &$this->category, &$this->params, 0]);
 $afterDisplayContent = trim(implode("\n", $results));
 
 ?>
+
 <div class="blog<?php echo $this->pageclass_sfx; ?>" itemscope itemtype="https://schema.org/Blog">
 	<?php if ($this->params->get('show_page_heading')) : ?>
 		<div class="page-header">
@@ -92,12 +95,12 @@ $afterDisplayContent = trim(implode("\n", $results));
 
 	<?php if (!empty($this->intro_items)) : ?>
 		<?php foreach ($this->intro_items as $key => &$item) : ?>
-			<?php $rowcount = ((int) $key % (int) $this->columns) + 1; ?>
+			<?php $rowcount = ((int) $key % (int) $this->params->get('num_columns')) + 1; ?>
 			<?php if ($rowcount === 1) : ?>
-				<?php $row = $counter / $this->columns; ?>
-				<div class="items-row cols-<?php echo (int) $this->columns; ?> <?php echo 'row-' . $row; ?> row-fluid row clearfix">
+				<?php $row = $counter / $this->params->get('num_columns'); ?>
+				<div class="items-row cols-<?php echo (int) $this->params->get('num_columns'); ?> <?php echo 'row-' . $row; ?> row-fluid row clearfix">
 			<?php endif; ?>
-			<div class="col-md-<?php echo round(12 / $this->columns); ?>">
+			<div class="col-md-<?php echo round(12 / $this->params->get('num_columns')); ?>">
 				<div class="item column-<?php echo $rowcount; ?><?php echo $item->state == 0 ? ' system-unpublished' : null; ?>"
 					itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
 					<?php
@@ -114,6 +117,7 @@ $afterDisplayContent = trim(implode("\n", $results));
 		<?php endforeach; ?>
 	<?php endif; ?>
 
+
 	<?php if (!empty($this->link_items)) : ?>
 		<div class="items-more">
 			<?php echo $this->loadTemplate('links'); ?>
@@ -127,7 +131,8 @@ $afterDisplayContent = trim(implode("\n", $results));
 			<?php endif; ?>
 			<?php echo $this->loadTemplate('children'); ?> </div>
 	<?php endif; ?>
-	<?php if (($this->params->def('show_pagination', 1) == 1 || ($this->params->get('show_pagination') == 2)) && ($this->pagination->get('pages.total') > 1)) : ?>
+	<?php if (($this->params->def('show_pagination', 1) == 1 || ($this->params->get('show_pagination') == 2))) :?>
+	<?php //&& ($this->pagination->get('pages.total') > 1))  ?>
 		<div class="pagination row justify-content-center">
 			<?php if ($this->params->def('show_pagination_results', 1)) : ?>
 				<p class="counter text-center"> <?php echo $this->pagination->getPagesCounter(); ?> </p>
