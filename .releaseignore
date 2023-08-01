@@ -1,0 +1,6 @@
+.releaseignore
+.gitignore
+README.md
+.git/
+.github/
+update_endpoint.xml
