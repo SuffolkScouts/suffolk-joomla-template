@@ -3,7 +3,7 @@
     <update>
 		<name>Suffolk Bootstrap</name>
 		<description>Suffolk Scouts Bookstrap Template</description>
-		<element>tpl_suffolkbootstrap</element>
+		<element>suffolkbootstrap</element>
 		<type>template</type>
 		<version>1.1.3</version>
 		<client>site</client>
@@ -15,7 +15,7 @@
 	<update>
 		<name>Suffolk Bootstrap</name>
 		<description>Suffolk Scouts Bookstrap Template</description>
-		<element>tpl_suffolkbootstrap</element>
+		<element>suffolkbootstrap</element>
 		<type>template</type>
 		<version>1.1.2</version>
 		<client>site</client>
