@@ -33,6 +33,7 @@ $afterDisplayContent = trim(implode("\n", $results));
 ?>
 
 <div class="blog<?php echo $this->pageclass_sfx; ?>" itemscope itemtype="https://schema.org/Blog">
+
 	<?php if ($this->params->get('show_page_heading')) : ?>
 		<div class="page-header">
 			<h1> <?php echo $this->escape($this->params->get('page_heading')); ?> </h1>
@@ -46,6 +47,7 @@ $afterDisplayContent = trim(implode("\n", $results));
 			<?php endif; ?>
 		</h2>
 	<?php endif; ?>
+
 	<?php echo $afterDisplayTitle; ?>
 
 	<?php if ($this->params->get('show_cat_tags', 1) && !empty($this->category->tags->itemTags)) : ?>
@@ -88,34 +90,23 @@ $afterDisplayContent = trim(implode("\n", $results));
 		</div><!-- end items-leading -->
 	<?php endif; ?>
 
-	<?php
-	$introcount = count($this->intro_items);
-	$counter = 0;
-	?>
-
 	<?php if (!empty($this->intro_items)) : ?>
-		<?php foreach ($this->intro_items as $key => &$item) : ?>
-			<?php $rowcount = ((int) $key % (int) $this->params->get('num_columns')) + 1; ?>
-			<?php if ($rowcount === 1) : ?>
-				<?php $row = $counter / $this->params->get('num_columns'); ?>
-				<div class="items-row cols-<?php echo (int) $this->params->get('num_columns'); ?> <?php echo 'row-' . $row; ?> row-fluid row clearfix">
-			<?php endif; ?>
-			<div class="col-md-<?php echo round(12 / $this->params->get('num_columns')); ?>">
-				<div class="item column-<?php echo $rowcount; ?><?php echo $item->state == 0 ? ' system-unpublished' : null; ?>"
-					itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-					<?php
-					$this->item = &$item;
-					echo $this->loadTemplate('item');
-					?>
-				</div>
-				<!-- end item -->
-				<?php $counter++; ?>
-			</div><!-- end span -->
-			<?php if (($rowcount == $this->columns) or ($counter == $introcount)) : ?>
-				</div><!-- end row -->
-			<?php endif; ?>
-		<?php endforeach; ?>
-	<?php endif; ?>
+        <?php $blogClass = $this->params->get('blog_class', ''); ?>
+        <?php if ((int) $this->params->get('num_columns') > 1) : ?>
+            <?php $blogClass .= (int) $this->params->get('multi_column_order', 0) === 0 ? ' masonry-' : ' columns-'; ?>
+            <?php $blogClass .= (int) $this->params->get('num_columns'); ?>
+        <?php endif; ?>
+        <div class="com-content-category-blog__items blog-items col-md-12 <?php echo $blogClass; ?>">
+        <?php foreach ($this->intro_items as $key => &$item) : ?>
+            <div class="com-content-category-blog__item blog-item item row" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+                    <?php
+                    $this->item = & $item;
+                    echo $this->loadTemplate('item');
+                    ?>
+            </div>
+        <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 
 
 	<?php if (!empty($this->link_items)) : ?>
