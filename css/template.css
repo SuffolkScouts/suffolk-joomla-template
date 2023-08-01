@@ -383,3 +383,28 @@ html {
   text-decoration: none;
   background-color: #007bff;
 }
+
+/* Ark Editor Frontend Hacks */
+a.jmodedit {
+    display: none;
+}
+
+/* Hide the tooltip by default */
+div[role="tooltip"] {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 3px;
+    z-index: 1;
+}
+  
+  /* Show the tooltip when the anchor is hovered */
+  /* a[aria-describedby]:hover + div[role="tooltip"] {
+    display: block;
+    top: 100%; 
+    left: 0;  
+  }
+*/
+ 
