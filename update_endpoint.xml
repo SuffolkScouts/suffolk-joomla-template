@@ -6,11 +6,11 @@
 		<element>tpl_suffolkbootstrap</element>
 		<type>template</type>
 		<version>1.1.3</version>
-		<client>administrator</client>
+		<client>site</client>
 		<downloads>
 			<downloadurl type="full" format="zip">https://github.com/SuffolkScouts/suffolk-joomla-template/releases/download/v1.1.3/tpl_suffolkbootstrap.zip</downloadurl>
 		</downloads>
-		<targetplatform name="joomla" version="4.[0123]" />
+		<targetplatform name="joomla" version="(4\.|3\.([89]|10))"/>
 		<php_minimum>7.3</php_minimum>
 	</update>
 	<update>
@@ -19,11 +19,11 @@
 		<element>tpl_suffolkbootstrap</element>
 		<type>template</type>
 		<version>1.1.2</version>
-		<client>administrator</client>
+		<client>site</client>
 		<downloads>
 			<downloadurl type="full" format="zip">https://github.com/SuffolkScouts/suffolk-joomla-template/releases/download/v1.1.2/tpl_suffolkbootstrap.zip</downloadurl>
 		</downloads>
-		<targetplatform name="joomla" version="4.[0123]" />
+        <targetplatform name="joomla" version="(4\.|3\.([89]|10))"/>
 		<php_minimum>7.3</php_minimum>
 	</update>
 </updates>
