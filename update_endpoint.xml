@@ -10,8 +10,7 @@
 		<downloads>
 			<downloadurl type="full" format="zip">https://github.com/SuffolkScouts/suffolk-joomla-template/releases/download/v1.1.3/tpl_suffolkbootstrap.zip</downloadurl>
 		</downloads>
-		<targetplatform name="joomla" version="(4\.|3\.([89]|10))"/>
-		<php_minimum>7.3</php_minimum>
+		<targetplatform name="joomla" version="4\.*"/>
 	</update>
 	<update>
 		<name>Suffolk Bootstrap</name>
@@ -23,7 +22,6 @@
 		<downloads>
 			<downloadurl type="full" format="zip">https://github.com/SuffolkScouts/suffolk-joomla-template/releases/download/v1.1.2/tpl_suffolkbootstrap.zip</downloadurl>
 		</downloads>
-        <targetplatform name="joomla" version="(4\.|3\.([89]|10))"/>
-		<php_minimum>7.3</php_minimum>
+        <targetplatform name="joomla" version="4\.*"/>
 	</update>
 </updates>
