@@ -74,6 +74,6 @@
         </fields>
     </config>
     <updateservers>
-        <server type="extension" priority="2" name="Suffolk Joomla Templates">http://example.com/extension.xml</server>
+        <server type="extension" priority="2" name="Suffolk Scouts - Bootstrap Joomla Template">https://github.com/SuffolkScouts/suffolk-joomla-template/raw/main/update_endpoint.xml</server>
      </updateservers>
 </extension>
