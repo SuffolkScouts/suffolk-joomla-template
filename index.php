@@ -1,11 +1,4 @@
 <?php
-/**
- * @package     Joomla.Site
- * @subpackage  Templates.protostar
- *
- * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
- */
 defined('_JEXEC') or die;
 
 $app = JFactory::getApplication();
@@ -258,9 +251,9 @@ if ($this->countModules('sidebar-left') && $this->countModules('sidebar-right'))
 
             <div class="row font-weight-light mt-4" style="font-size: 0.8em;">
                 <div class="col-sm-4">
-                    <a href="https://www.suffolkscouts.org.uk/contact-us/web-admin/website-privacy-statement"
+                    <a href="https://www.suffolkscouts.org.uk/privacy-policy/"
                         class="text-white">Privacy Policy</a> &nbsp;
-                    <a href="https://www.suffolkscouts.org.uk/contact-us/web-admin/data-protection-policy"
+                    <a href="https://www.suffolkscouts.org.uk/data-protection-policy/"
                         class="text-white">Data Protection</a>
                 </div>
                 <div class="col-sm-4 text-center ">
