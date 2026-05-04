@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="4.0" type="template" client="site" method="upgrade">
-    <name>Suffolk Dev</name>
+    <name>Suffolk Scouts</name>
     <version>2.0.0</version>
     <creationDate>April 2026</creationDate>
     <author>Suffolk Scouts</author>
