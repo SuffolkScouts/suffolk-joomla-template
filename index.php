@@ -513,7 +513,7 @@ $footerCols = sfFooterColumns();
                 <?php else: ?>
                     <a class="sf-account__login" href="/index.php?option=com_users&view=profile"><?php echo htmlspecialchars($user->name, ENT_COMPAT, 'UTF-8'); ?></a>
                 <?php endif; ?>
-                <a class="sf-button sf-button--yellow sf-account__join" href="/join-us">Join us</a>
+                <!-- <a class="sf-button sf-button--yellow sf-account__join" href="/join-us">Join us</a> -->
             </div>
         </div>
         <div class="sf-menu-backdrop" data-sf-menu-backdrop></div>
@@ -552,10 +552,11 @@ $footerCols = sfFooterColumns();
                 <div class="sf-container sf-hero__inner">
                     <div class="sf-hero__copy">
                         <h1>Preparing<br>young people<br>with <span>skills</span><br><span class="sf-hero__teal">for life</span>.</h1>
-                        <p>From Bury St Edmunds to Felixstowe, Suffolk Scouts run local groups across the county. Whether you're a parent, a young person, or a future volunteer, there's a place for you with us.</p>
+                        <!-- <p>From Bury St Edmunds to Felixstowe, Suffolk Scouts run local groups across the county. Whether you're a parent, a young person, or a future volunteer, there's a place for you.</p> -->
+                         <p>We're made up of 8 district areas with over 100 Scout Groups and other Units, allowing young people and adults to enjoy the adventures and friendships that Scouting can bring.</p>
                         <div class="sf-actions">
-                            <a class="sf-button sf-button--yellow sf-button--large" href="/join-us/find-a-group">Find a group near you <?php echo $arrow; ?></a>
-                            <a class="sf-button sf-button--outline-dark sf-button--large" href="/volunteer">Volunteer with us</a>
+                            <a class="sf-button sf-button--yellow sf-button--large" href="/about/find-your-local-group">Find a group near you <?php echo $arrow; ?></a>
+                            <a class="sf-button sf-button--outline-dark sf-button--large" href="/contact-us/suffolkvacancies">Volunteer with us</a>
                         </div>
                     </div>
                     <div class="sf-photo-grid" aria-label="Suffolk Scouts activities">
@@ -592,21 +593,21 @@ $footerCols = sfFooterColumns();
                     </div>
                     <form class="sf-finder__form" action="https://www.scouts.org.uk/groups/" method="get" target="_blank" rel="noopener">
                         <label class="sf-visually-hidden" for="sf-postcode">Postcode or town</label>
-                        <input id="sf-postcode" name="loc" type="search" value="IP1 2BX" autocomplete="postal-code">
+                        <input id="sf-postcode" name="loc" type="search" placeholder="Postcode or town" autocomplete="postal-code">
                         <button type="submit">Search <?php echo $arrow; ?></button>
                     </form>
-                    <p>Enter a postcode or town - we'll show the nearest Squirrels, Cubs or Scouts group.</p>
+                    <p>Enter a postcode or town - we'll show your local group</p>
                 </div>
             </section>
 
             <section class="sf-news" aria-labelledby="sf-news-title">
                 <div class="sf-container">
                     <div class="sf-section-head">
-                        <h2 id="sf-news-title">Latest from the county.</h2>
+                        <h2 id="sf-news-title">Latest News</h2>
                         <div class="sf-filter-tabs" aria-label="News filters">
-                            <?php foreach (['All', 'News', 'Events', 'Training', 'Awards'] as $i => $tab): ?>
+                            <!-- <?php foreach (['All', 'News', 'Events', 'Training', 'Awards'] as $i => $tab): ?>
                                 <button class="<?php echo $i === 0 ? 'is-active' : ''; ?>" type="button"><?php echo $tab; ?></button>
-                            <?php endforeach; ?>
+                            <?php endforeach; ?> -->
                         </div>
                     </div>
                     <div class="sf-news__grid">
@@ -622,35 +623,6 @@ $footerCols = sfFooterColumns();
                             </a>
                         <?php endforeach; ?>
                     </div>
-                </div>
-            </section>
-
-            <section class="sf-cta" aria-label="Volunteer and safeguarding">
-                <div class="sf-container sf-cta__grid">
-                    <div class="sf-volunteer">
-                        <div class="sf-volunteer__copy">
-                            <h2>Volunteer two hours, change a young person's year.</h2>
-                            <p>No experience needed. We'll train you, match you to a group close to home, and give you the time of your life doing it.</p>
-                            <div class="sf-actions">
-                                <a class="sf-button sf-button--yellow" href="/volunteer">Become a volunteer <?php echo $arrow; ?></a>
-                                <a class="sf-button sf-button--outline-light" href="/volunteer/stories">Read our stories</a>
-                            </div>
-                        </div>
-                        <div class="sf-volunteer__image" aria-hidden="true"></div>
-                        <div class="sf-volunteer__mark" aria-hidden="true"><?php echo $rosette(280, '#FFFFFF'); ?></div>
-                    </div>
-
-                    <aside class="sf-safeguarding">
-                        <div>
-                            <span>Safeguarding</span>
-                            <h2>Safety first - always.</h2>
-                            <p>Every Suffolk Scout volunteer is vetted, trained and supported. If you have a concern, tell us. We'll listen.</p>
-                        </div>
-                        <a class="sf-safeguarding__phone" href="tel:03453001818">
-                            <span>24-hour line</span>
-                            <strong>0345 300 1818</strong>
-                        </a>
-                    </aside>
                 </div>
             </section>
 
@@ -733,7 +705,7 @@ $footerCols = sfFooterColumns();
                 <?php endif; ?>
 
                 <div class="sf-footer__legal">
-                    <span>&copy; 2011 - <?php echo date('Y'); ?> Suffolk County Scout Council. All rights reserved.</span>
+                    <span>&copy; 2011 - <?php echo date('Y'); ?> Suffolk County Scout Council. All Rights Reserved.</span>
                     <span>
                         <a href="<?php echo Route::_('index.php?Itemid=2243'); ?>">Privacy</a>
                         <a href="<?php echo Route::_('index.php?Itemid=2242'); ?>">Data Protection</a>
