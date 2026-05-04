@@ -1,0 +1,54 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Need full history so we can push the update_endpoint.xml update back
+          fetch-depth: 0
+
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Update update_endpoint.xml
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          TAG="${{ github.ref_name }}"
+          DOWNLOAD_URL="https://github.com/SuffolkScouts/suffolk-joomla-template/releases/download/${TAG}/tpl_suffolkdev.zip"
+
+          # Build the new <update> block
+          NEW_ENTRY="\\t<update>\\n\\t\\t<name>Suffolk Scouts<\\/name>\\n\\t\\t<description>Suffolk Scouts Joomla Template<\\/description>\\n\\t\\t<element>suffolkdev<\\/element>\\n\\t\\t<type>template<\\/type>\\n\\t\\t<version>${VERSION}<\\/version>\\n\\t\\t<client>site<\\/client>\\n\\t\\t<downloads>\\n\\t\\t\\t<downloadurl type=\\"full\\" format=\\"zip\\">${DOWNLOAD_URL}<\\/downloadurl>\\n\\t\\t<\\/downloads>\\n\\t\\t<targetplatform name=\\"joomla\\" version=\\"4\\\\\\\\.*\\"/>\\n\\t<\\/update>"
+
+          # Insert the new entry just after the opening <updates> tag
+          sed -i "s|<updates>|<updates>\\n${NEW_ENTRY}|" update_endpoint.xml
+
+      - name: Commit updated update_endpoint.xml
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add update_endpoint.xml
+          git commit -m "Release ${{ github.ref_name }}: update update_endpoint.xml"
+          git push origin HEAD:main
+
+      - name: Zip up the template
+        run: zip -r tpl_suffolkdev.zip . -x@.releaseignore
+
+      - name: Create GitHub Release and upload zip
+        uses: softprops/action-gh-release@v2
+        with:
+          files: tpl_suffolkdev.zip
+          name: ${{ github.ref_name }}
+          draft: false
+          prerelease: false

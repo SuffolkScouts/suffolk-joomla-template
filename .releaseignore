@@ -1,0 +1,6 @@
+.releaseignore
+.gitignore
+README.md
+.git/
+.github/
+tpl_suffolkdev.zip
