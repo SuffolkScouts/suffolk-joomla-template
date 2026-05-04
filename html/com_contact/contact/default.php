@@ -33,14 +33,12 @@ $htag = $tparams->get('show_page_heading') ? 'h2' : 'h1';
 	<?php endif; ?>
 
 	<?php if ($this->item->name && $tparams->get('show_name')): ?>
-		<div class="page-header">
-			<h2>
-				<?php if ($this->item->published == 0): ?>
-                    <span class="badge bg-warning text-light"><?php echo Text::_('JUNPUBLISHED'); ?></span>
-				<?php endif; ?>
-                <span class="contact-name" itemprop="name"><?php echo $this->item->name; ?></span>
-			</h2>
-		</div>
+		<h2 class="sf-contact__name">
+			<?php if ($this->item->published == 0): ?>
+                <span class="sf-badge sf-badge--warning"><?php echo Text::_('JUNPUBLISHED'); ?></span>
+			<?php endif; ?>
+            <span class="contact-name" itemprop="name"><?php echo $this->item->name; ?></span>
+		</h2>
 	<?php endif; ?>
 
 	<?php if ($canEdit) : ?>
@@ -187,11 +185,6 @@ $htag = $tparams->get('show_page_heading') ? 'h2' : 'h1';
         </div>
     <?php endif; ?>
 
-	<?php if ($this->params->get('presentation_style') == 'sliders'): ?>
-		<?php echo JHtml::_('bootstrap.endAccordion'); ?>
-	<?php endif; ?>
-	<?php if ($this->params->get('presentation_style') == 'tabs'): ?>
-		<?php echo JHtml::_('bootstrap.endTabSet'); ?>
-	<?php endif; ?>
+	<?php // presentation_style sliders/tabs are not used in this template ?>
 	<?php echo $this->item->event->afterDisplayContent; ?>
 </div>

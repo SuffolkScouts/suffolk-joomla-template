@@ -1,235 +1,195 @@
 <?php
 /**
- * @package     Joomla.Site
- * @subpackage  Templates.protostar
- *
- * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * Suffolk Scouts – error page (404, 403, 500, …)
  */
 defined('_JEXEC') or die;
 
-$app = JFactory::getApplication();
-$doc = JFactory::getDocument();
-$user = JFactory::getUser();
-$this->language = $doc->language;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+
+$app  = Factory::getApplication();
+$doc  = Factory::getDocument();
+
+$this->language  = $doc->language;
 $this->direction = $doc->direction;
 
-// Getting params from template
-$params = $app->getTemplate(true)->params;
+$base        = rtrim($this->baseurl, '/');
+$templateUrl = $base . '/templates/' . $this->template;
+$templatePath = __DIR__;
+$siteName    = $app->get('sitename') ?: 'Suffolk Scouts';
 
-// Detecting Active Variables
-$option = $app->input->getCmd('option', '');
-$view = $app->input->getCmd('view', '');
-$layout = $app->input->getCmd('layout', '');
-$task = $app->input->getCmd('task', '');
-$itemid = $app->input->getCmd('Itemid', '');
-$sitename = $app->get('sitename');
+$cssVersion = is_file($templatePath . '/css/template.css') ? filemtime($templatePath . '/css/template.css') : time();
 
-// Add JavaScript Frameworks
-JHtml::_('jquery.framework');
+$errorCode    = (int) $this->error->getCode();
+$errorMessage = htmlspecialchars($this->error->getMessage(), ENT_QUOTES, 'UTF-8');
 
+$heading = match ($errorCode) {
+    404 => 'Page not found',
+    403 => 'Access denied',
+    500 => 'Something went wrong',
+    default => 'An error occurred',
+};
+
+$body = match ($errorCode) {
+    404 => 'The page you\'re looking for may have moved, been renamed, or no longer exists.',
+    403 => 'You don\'t have permission to view this page.',
+    500 => 'We\'re working on it. Please try again shortly or get in touch if this keeps happening.',
+    default => 'An unexpected error has occurred. Please try again or return to the home page.',
+};
+
+$rosette = static function (int $size = 36, string $color = 'currentColor'): string {
+    $size      = max(16, $size);
+    $safeColor = htmlspecialchars($color, ENT_COMPAT, 'UTF-8');
+
+    return '<svg class="sf-rosette" width="' . $size . '" height="' . $size . '" viewBox="0 0 40 40" fill="none" aria-hidden="true">'
+        . '<circle cx="20" cy="20" r="18" stroke="' . $safeColor . '" stroke-width="1.5"/>'
+        . '<path d="M20 4 L22 18 L36 20 L22 22 L20 36 L18 22 L4 20 L18 18 Z" fill="' . $safeColor . '"/>'
+        . '<circle cx="20" cy="20" r="2.5" fill="#4C1F7A" stroke="' . $safeColor . '" stroke-width="1"/>'
+        . '</svg>';
+};
+
+$arrow = '<svg class="sf-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">'
+    . '<path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'
+    . '</svg>';
+
+$navLinks = [
+    ['label' => 'About', 'href' => '/about/about-us'],
+    ['label' => 'Contact', 'href' => '/contact-us/suffolkvacancies'],
+    ['label' => 'News', 'href' => '/news'],
+    ['label' => 'Districts', 'href' => '/districts/districts-2'],
+    ['label' => 'Learning', 'href' => '/training/adult-training'],
+    ['label' => 'Youth Shaped', 'href' => '/youth-shaped/youth-shaped-scouting-2'],
+    ['label' => 'Programme', 'href' => '/programme/all-section-activities'],
+];
+
+$footerColumns = [
+    'About' => [
+        ['label' => 'About Us', 'href' => '/about/about-us'],
+        ['label' => 'Transformation', 'href' => '/about/transformation'],
+        ['label' => 'Find Your Local Group', 'href' => '/about/find-your-local-group'],
+        ['label' => 'Strategic Plan', 'href' => '/about/strategic-plan'],
+    ],
+    'Programme' => [
+        ['label' => 'All Section Activities', 'href' => '/programme/all-section-activities'],
+        ['label' => 'Sections', 'href' => '/programme/sections'],
+        ['label' => 'Duke of Edinburgh Scheme', 'href' => '/programme/dofe-programme'],
+    ],
+    'Learning' => [
+        ['label' => 'Learning for Roles', 'href' => '/training/adult-training'],
+        ['label' => 'Pathways to Permits', 'href' => '/training/pathways-to-permits'],
+        ['label' => 'Nights Away', 'href' => '/training/nights-away'],
+    ],
+    'Contact' => [
+        ['label' => 'Volunteer Vacancies', 'href' => '/contact-us/suffolkvacancies'],
+        ['label' => 'County Office', 'href' => '/contact-us/county-office'],
+        ['label' => 'Technical Help & Support', 'href' => '/contact-us/technical-help'],
+    ],
+];
 ?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title><?php echo $this->title; ?> <?php echo htmlspecialchars($this->error->getMessage(), ENT_QUOTES, 'UTF-8'); ?></title>
+<!doctype html>
+<html lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title><?php echo $errorCode . ' – ' . htmlspecialchars($heading, ENT_COMPAT, 'UTF-8') . ' | ' . htmlspecialchars($siteName, ENT_COMPAT, 'UTF-8'); ?></title>
+    <meta name="robots" content="noindex">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $templateUrl; ?>/images/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo $templateUrl; ?>/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $templateUrl; ?>/images/favicon/favicon-16x16.png">
+    <link rel="shortcut icon" href="<?php echo $templateUrl; ?>/images/favicon/favicon.ico">
+    <meta name="theme-color" content="#4C1F7A">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/template.css?v=<?php echo $cssVersion; ?>">
+    <?php if ($app->get('debug_lang', '0') == '1' || $app->get('debug', '0') == '1'): ?>
+        <link rel="stylesheet" href="<?php echo $base; ?>/media/cms/css/debug.css">
+    <?php endif; ?>
+</head>
+<body class="sf-site sf-page sf-error-page">
+    <a class="sf-skip" href="#content">Skip to content</a>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,400;1,600&display=swap" rel="stylesheet">
-
-
-        <link rel="stylesheet" href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/css/template.css" type="text/css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/scoutstrap/scoutstrap@0.1.1/dist/css/scoutstrap.min.css" type="text/css" />
-        <link rel="stylesheet" href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/css/font-awesome.min.css" type="text/css" />
-
-        <?php if ($app->get('debug_lang', '0') == '1' || $app->get('debug', '0') == '1') : ?>
-            <link rel="stylesheet" href="<?php echo $this->baseurl; ?>/media/cms/css/debug.css" type="text/css" />
-        <?php endif; ?>
-
-        <link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
-        <!--[if lt IE 9]>
-                <script src="<?php echo $this->baseurl; ?>/media/jui/js/html5.js"></script>
-        <![endif]-->
-
-    </head>
-
-    <body>
-
-       <!-- Header -->
-       <div class="container">
-            <nav class="navbar navbar-expand-lg navbar-light bg-faded">
-                <a class="navbar-brand" href="<?php echo JURI::base(); ?>">
-                    <div class="logo-inline-black logo-inline-w200">
-                        <h6>Suffolk</h6>
-                    </div> 
-                </a>
-
-                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-                    <jdoc:include type="modules" name="navbar-1" style="none" />
-
-                    <span class="navbar-text pr-3 pl-2 d-none d-lg-inline">|</span>
-
-                    <?php
-                        //Check login status
-                        $user = JFactory::getUser();
-
-                        if ($user->guest) { //Display Login Link
-                    ?>
-                            <a class="navbar-text text-decoration-none" href="/index.php?option=com_users&lang=en&view=login"><i class="fa fa-user"></i> Login</a>
-
-                    <?php
-                        } else { //Display User Details
-                            $userToken = JSession::getFormToken();
-                    ?>
-                        <ul class="navbar-nav">
-                            <li class="dropdown nav-item parent">
-                                <a id="user-options" class="dropdown-toggle nav-link font-weight-bolder" href="#" role="button" ><?php echo  $user->name; ?></a>
-                                <ul class="dropdown-menu" aria-labelledby="user-options">
-
-                                    <li class="">
-                                        <a class="dropdown-item" href="#">Update my Details</a>
-                                    </li>
-
-                                    <li class="">
-                                        <a class="dropdown-item" href="#">Change Password</a>
-                                    </li>
-
-                                    <li><hr class="dropdown-divider"></li>
-
-                                    <li class="">
-                                        <a class="dropdown-item" href="/index.php?option=com_users&task=user.logout&<?php echo $userToken; ?>=1">Logout</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    <?php
-                        }
-                    ?>
-
-                    <jdoc:include type="modules" name="user-menu" style="none" />
-                </div>
+    <header class="sf-header" data-sf-header>
+        <div class="sf-header__inner">
+            <a class="sf-brand" href="<?php echo Uri::base(); ?>" aria-label="<?php echo htmlspecialchars($siteName, ENT_COMPAT, 'UTF-8'); ?> home">
+                <img class="sf-brand__logo" src="<?php echo $templateUrl; ?>/images/365-logo.svg" alt="Suffolk Scouts">
+            </a>
+            <nav class="sf-nav" aria-label="Main navigation">
+                <?php foreach ($navLinks as $link): ?>
+                    <div class="sf-nav__item">
+                        <a class="sf-nav__link" href="<?php echo $base . htmlspecialchars($link['href'], ENT_COMPAT, 'UTF-8'); ?>">
+                            <?php echo htmlspecialchars($link['label'], ENT_COMPAT, 'UTF-8'); ?>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
             </nav>
+            <div class="sf-account">
+                <a class="sf-button sf-button--yellow sf-account__join" href="<?php echo $base; ?>/join-us">Join us</a>
+            </div>
         </div>
+    </header>
 
-        <header>
-        <jdoc:include type="modules" name="banner" style="xhtml" />
-        </header>
-
-        <main class="body">
-
-            <jdoc:include type="modules" name="above-content" style="xhtml" />
-
-            <div class="content">
-                
-                <div class="container<?php echo ($params->get('fluidContainer') ? '-fluid' : ''); ?>">
-                    
-                    <div class="row">
-                    <h1><?php echo JText::_('JERROR_LAYOUT_PAGE_NOT_FOUND'); ?></h1>
-                            <div class="col-md-6">
-                                <p><strong><?php echo JText::_('JERROR_LAYOUT_ERROR_HAS_OCCURRED_WHILE_PROCESSING_YOUR_REQUEST'); ?></strong></p>
-                                <p><?php echo JText::_('JERROR_LAYOUT_NOT_ABLE_TO_VISIT'); ?></p>
-                                <ul>
-                                    <li><?php echo JText::_('JERROR_LAYOUT_AN_OUT_OF_DATE_BOOKMARK_FAVOURITE'); ?></li>
-                                    <li><?php echo JText::_('JERROR_LAYOUT_MIS_TYPED_ADDRESS'); ?></li>
-                                    <li><?php echo JText::_('JERROR_LAYOUT_SEARCH_ENGINE_OUT_OF_DATE_LISTING'); ?></li>
-                                    <li><?php echo JText::_('JERROR_LAYOUT_YOU_HAVE_NO_ACCESS_TO_THIS_PAGE'); ?></li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6 text-xs-center">
-                                <div class="display-1"><i class="fa fa-medkit" aria-hidden="true"></i></div>
-                                <?php if (JModuleHelper::getModule('search')) : ?>
-                                    <p><strong><?php echo JText::_('JERROR_LAYOUT_SEARCH'); ?></strong></p>
-                                    <p><?php echo JText::_('JERROR_LAYOUT_SEARCH_PAGE'); ?></p>
-                                    <?php echo $doc->getBuffer('module', 'search'); ?>
-                                <?php endif; ?>
-                                <p><?php echo JText::_('JERROR_LAYOUT_GO_TO_THE_HOME_PAGE'); ?></p>
-                                <p><a href="<?php echo $this->baseurl; ?>/" class="btn btn-primary"><span class="fa fa-home"></span> <?php echo JText::_('JERROR_LAYOUT_HOME_PAGE'); ?></a></p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <hr />
-                                <p><?php echo JText::_('JERROR_LAYOUT_PLEASE_CONTACT_THE_SYSTEM_ADMINISTRATOR'); ?></p>
-                                <blockquote>
-                                    <span class="badge badge-danger"><?php echo $this->error->getCode(); ?></span> <?php echo htmlspecialchars($this->error->getMessage(), ENT_QUOTES, 'UTF-8'); ?>
-                                </blockquote>
-                                <?php if ($this->debug) : ?>
-                                    <?php echo $this->renderBacktrace(); ?>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                </div>
+    <main id="content" class="sf-main" role="main">
+        <section class="sf-error" aria-labelledby="sf-error-heading">
+            <div class="sf-error__decoration" aria-hidden="true">
+                <?php echo $rosette(320, '#4C1F7A'); ?>
             </div>
+            <div class="sf-container sf-error__inner">
+                <div class="sf-error__code" aria-hidden="true"><?php echo $errorCode ?: ''; ?></div>
+                <h1 id="sf-error-heading"><?php echo htmlspecialchars($heading, ENT_COMPAT, 'UTF-8'); ?></h1>
+                <p><?php echo htmlspecialchars($body, ENT_COMPAT, 'UTF-8'); ?></p>
+                <div class="sf-actions">
+                    <a class="sf-button sf-button--yellow sf-button--large" href="<?php echo $base; ?>/">Home page <?php echo $arrow; ?></a>
+                    <a class="sf-button sf-button--outline-dark sf-button--large" href="<?php echo $base; ?>/contact-us">Contact us</a>
+                </div>
+                <?php if ($this->debug): ?>
+                    <details class="sf-error__debug">
+                        <summary><strong><?php echo $errorCode; ?></strong> <?php echo $errorMessage; ?></summary>
+                        <?php echo $this->renderBacktrace(); ?>
+                    </details>
+                <?php endif; ?>
+            </div>
+        </section>
+    </main>
 
-            <jdoc:include type="modules" name="below-content" style="xhtml" />
-
-        </main>
-
-        <footer class="footer bg-primary text-white pt-4 pb-2" role="contentinfo">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-4">
-
-                        <div class="logo-inline-white logo-inline-w200 mb-4">
-                            <h6>Suffolk</h6>
-                        </div> 
-
-                        <address style="font-size: 0.9em;">
-                            <strong>County Office:</strong> <br/>
-                            143 Cauldwell Hall Rd <br />
-                            Ipswich, Suffolk IP4 5BS
+    <footer class="sf-footer" role="contentinfo">
+        <div class="sf-footer__main">
+            <div class="sf-container">
+                <div class="sf-footer__grid">
+                    <div class="sf-footer__brand">
+                        <div class="sf-footer__logo">
+                            <img class="sf-footer__logo-img" src="<?php echo $templateUrl; ?>/images/365-logo.svg" alt="Suffolk Scouts">
+                        </div>
+                        <address>
+                            Suffolk Scouts County Office<br>
+                            Hallowtree Scout Activity Centre<br>
+                            Alnesbourne Priory<br>
+                            Nacton, Ipswich, Suffolk IP10 0JP
                         </address>
-
-                        <p style="font-size: 0.9em;">
-                            <strong>Phone:</strong> 01473 711678 <br />
-                            <strong>Email:</strong> contact@suffolkscouts.org.uk
-                        </p>
-
+                        <p><a href="tel:01473711678">01473 711678</a><br><a href="mailto:contact@suffolkscouts.org.uk">contact@suffolkscouts.org.uk</a></p>
                     </div>
-                    <div class="col-sm-4 text-center">
-                        <jdoc:include type="modules" name="footer" style="none" />
-                        <p></p>
-                    </div>
-                    <div class="col-sm-4">
-                        <p class="text-right">
-                            <a href="#top" id="back-top" class="text-white">
-                                <i class="fa fa-arrow-up"></i> Top
-                            </a>
-                        </p>
-                    </div>
+                    <?php foreach ($footerColumns as $title => $links): ?>
+                        <nav class="sf-footer__col" aria-label="<?php echo htmlspecialchars($title, ENT_COMPAT, 'UTF-8'); ?>">
+                            <h2><?php echo htmlspecialchars($title, ENT_COMPAT, 'UTF-8'); ?></h2>
+                            <?php foreach ($links as $link): ?>
+                                <a href="<?php echo $base . htmlspecialchars($link['href'], ENT_COMPAT, 'UTF-8'); ?>"><?php echo htmlspecialchars($link['label'], ENT_COMPAT, 'UTF-8'); ?></a>
+                            <?php endforeach; ?>
+                        </nav>
+                    <?php endforeach; ?>
                 </div>
-                <div class="row font-weight-light mt-4" style="font-size: 0.8em;">
-                <div class="col-sm-4">
-                    <a href="#" class="text-white">Privacy Policy</a> &nbsp;
-                    <a href="#" class="text-white">Data Protection</a>
-                </div>
-                <div class="col-sm-4 text-center ">
-                    &copy; 2011 - <?php echo date('Y'); ?> <?php echo $sitename; ?>
-                </div>
-                <div class="col-sm-4">
-                        <p class="text-right">
-                            <a href="#top" id="back-top" class="text-white">
-                                <i class="fa fa-arrow-up"></i>
-                            </a>
-                        </p>
-                    </div>
+                <div class="sf-footer__legal">
+                    <span>&copy; 2011 - <?php echo date('Y'); ?> Suffolk County Scout Council. All rights reserved.</span>
+                    <span>
+                        <a href="<?php echo $base; ?>/privacy-policy">Privacy</a>
+                        <a href="<?php echo $base; ?>/data-protection-policy">Data Protection</a>
+                        <a href="<?php echo $base; ?>/about/safeguarding">Safeguarding</a>
+                    </span>
                 </div>
             </div>
-        </footer>
+        </div>
+    </footer>
 
-        <?php echo $doc->getBuffer('modules', 'debug', array('style' => 'none')); ?>
-
-        <!-- Scripts -->
-     <script src="<?php echo($this->baseurl . '/templates/' . $this->template . '/js/template.js'); ?>"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/gh/scoutstrap/scoutstrap@0.1.1/dist/js/bootstrap.min.js" integrity="sha384-vZA7fWbUdVwzQZlO+dkC65mKiaTlKyDvRFeWWT/+J8nBCX0A/OJE2YaFG+m4Zhv0" crossorigin="anonymous"></script>
-    </body>
+    <script src="<?php echo $templateUrl; ?>/js/template.js?v=<?php echo $cssVersion; ?>"></script>
+</body>
 </html>

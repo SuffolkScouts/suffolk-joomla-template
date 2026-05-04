@@ -2,173 +2,176 @@
 /**
  * @package     Joomla.Site
  * @subpackage  com_content
- *
- * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 defined('_JEXEC') or die;
 
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\FileLayout;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Component\Content\Site\Helper\RouteHelper;
 
-// Create shortcuts to some parameters.
-$params  = $this->item->params;
-$images  = json_decode($this->item->images);
-$urls    = json_decode($this->item->urls);
+$params = $this->item->params;
+$images = json_decode((string) $this->item->images);
+$urls = json_decode((string) $this->item->urls);
 $canEdit = $params->get('access-edit');
-$user    = JFactory::getUser();
-$info    = $params->get('info_block_position', 0);
-//JHtml::_('behavior.caption');
+$user = Factory::getUser();
+$info = $params->get('info_block_position', 0);
+$useDefList = $params->get('show_modify_date') || $params->get('show_publish_date') || $params->get('show_create_date')
+    || $params->get('show_hits') || $params->get('show_category') || $params->get('show_parent_category') || $params->get('show_author');
+
+$date = $this->item->publish_up && $this->item->publish_up !== Factory::getDbo()->getNullDate() ? $this->item->publish_up : $this->item->created;
+$articleHeading = $params->get('show_title') ? $this->item->title : (string) $this->params->get('page_heading', $this->item->title);
+$articleHeading = trim($articleHeading) !== '' ? $articleHeading : $this->item->title;
+$fullImage = '';
+$fullImageAlt = '';
+
+if (is_object($images)) {
+    $fullImage = (string) ($images->image_fulltext ?: $images->image_intro ?: '');
+    $fullImageAlt = (string) ($images->image_fulltext_alt ?: $images->image_intro_alt ?: $this->item->title);
+}
+
+if ($fullImage !== '') {
+    $fullImage = explode('#', $fullImage, 2)[0];
+    if (!preg_match('#^(https?:)?//#i', $fullImage)) {
+        $fullImage = Uri::root(true) . '/' . ltrim($fullImage, '/');
+    }
+}
+
+$statusLabels = [];
+if ($this->item->state == 0) {
+    $statusLabels[] = Text::_('JUNPUBLISHED');
+}
+if (strtotime($this->item->publish_up) > strtotime(Factory::getDate())) {
+    $statusLabels[] = Text::_('JNOTPUBLISHEDYET');
+}
+if ((strtotime($this->item->publish_down) < strtotime(Factory::getDate())) && $this->item->publish_down != Factory::getDbo()->getNullDate()) {
+    $statusLabels[] = Text::_('JEXPIRED');
+}
 ?>
-<div class="item-page<?php echo $this->pageclass_sfx; ?>" itemscope itemtype="https://schema.org/Article">
-	<meta itemprop="inLanguage" content="<?php echo ($this->item->language === '*') ? JFactory::getConfig()->get('language') : $this->item->language; ?>" />
-	<?php if ($this->params->get('show_page_heading')) : ?>
-	<div class="page-header">
-		<h1> <?php echo $this->escape($this->params->get('page_heading')); ?> </h1>
-	</div>
-	<?php endif;
-	if (!empty($this->item->pagination) && $this->item->pagination && !$this->item->paginationposition && $this->item->paginationrelative)
-	{
-		echo $this->item->pagination;
-	}
-	?>
 
-	<?php // Todo Not that elegant would be nice to group the params ?>
-	<?php $useDefList = ($params->get('show_modify_date') || $params->get('show_publish_date') || $params->get('show_create_date')
-	|| $params->get('show_hits') || $params->get('show_category') || $params->get('show_parent_category') || $params->get('show_author') ); ?>
+<article class="sf-article item-page<?php echo $this->pageclass_sfx; ?>" itemscope itemtype="https://schema.org/Article">
+    <meta itemprop="inLanguage" content="<?php echo ($this->item->language === '*') ? Factory::getConfig()->get('language') : $this->item->language; ?>">
 
-	<?php if (!$useDefList && $this->print) : ?>
-		<div id="pop-print" class="btn hidden-print">
-			<?php echo JHtml::_('icon.print_screen', $this->item, $params); ?>
-		</div>
-		<div class="clearfix"> </div>
-	<?php endif; ?>
-	<?php if ($params->get('show_title') || $params->get('show_author')) : ?>
-	<div class="page-header">
-		<?php if ($params->get('show_title')) : ?>
-			<h2 itemprop="name">
-				<?php echo $this->escape($this->item->title); ?>
-			</h2>
-		<?php endif; ?>
-		<?php if ($this->item->state == 0) : ?>
-			<span class="label label-warning"><?php echo JText::_('JUNPUBLISHED'); ?></span>
-		<?php endif; ?>
-		<?php if (strtotime($this->item->publish_up) > strtotime(JFactory::getDate())) : ?>
-			<span class="label label-warning"><?php echo JText::_('JNOTPUBLISHEDYET'); ?></span>
-		<?php endif; ?>
-		<?php if ((strtotime($this->item->publish_down) < strtotime(JFactory::getDate())) && $this->item->publish_down != JFactory::getDbo()->getNullDate()) : ?>
-			<span class="label label-warning"><?php echo JText::_('JEXPIRED'); ?></span>
-		<?php endif; ?>
-	</div>
-	<?php endif; ?>
-	<?php if (!$this->print) : ?>
-		<?php if ($canEdit || $params->get('show_print_icon') || $params->get('show_email_icon')) : ?>
-			<?php echo JLayoutHelper::render('joomla.content.icons', array('params' => $params, 'item' => $this->item, 'print' => false)); ?>
-		<?php endif; ?>
-	<?php else : ?>
-		<?php if ($useDefList) : ?>
-			<div id="pop-print" class="btn hidden-print">
-				<?php echo JHtml::_('icon.print_screen', $this->item, $params); ?>
-			</div>
-		<?php endif; ?>
-	<?php endif; ?>
+    <?php if (!$this->print && ($canEdit || $params->get('show_print_icon') || $params->get('show_email_icon'))) : ?>
+        <div class="sf-article__tools">
+            <?php echo LayoutHelper::render('joomla.content.icons', ['params' => $params, 'item' => $this->item, 'print' => false]); ?>
+        </div>
+    <?php endif; ?>
 
-	<?php if ($useDefList && ($info == 0 || $info == 2)) : ?>
-		<?php echo JLayoutHelper::render('joomla.content.info_block.block', array('item' => $this->item, 'params' => $params, 'position' => 'above')); ?>
-	<?php endif; ?>
+    <?php if ($this->params->get('show_page_heading')) : ?>
+        <p class="sf-article__section"><?php echo $this->escape($this->params->get('page_heading')); ?></p>
+    <?php elseif (!empty($this->item->category_title)) : ?>
+        <p class="sf-article__section"><?php echo htmlspecialchars($this->item->category_title, ENT_COMPAT, 'UTF-8'); ?></p>
+    <?php endif; ?>
 
-	<?php if ($info == 0 && $params->get('show_tags', 1) && !empty($this->item->tags->itemTags)) : ?>
-		<?php $this->item->tagLayout = new JLayoutFile('joomla.content.tags'); ?>
+    <header class="sf-article__header">
+        <h1 itemprop="name"><?php echo $this->escape($articleHeading); ?></h1>
 
-		<?php echo $this->item->tagLayout->render($this->item->tags->itemTags); ?>
-	<?php endif; ?>
+        <div class="sf-article__meta">
+            <?php if (!empty($this->item->category_title) && $params->get('show_category')) : ?>
+                <span><?php echo htmlspecialchars($this->item->category_title, ENT_COMPAT, 'UTF-8'); ?></span>
+            <?php endif; ?>
+            <?php if ($params->get('show_publish_date') || $params->get('show_create_date')) : ?>
+                <time datetime="<?php echo HTMLHelper::_('date', $date, 'c'); ?>"><?php echo HTMLHelper::_('date', $date, 'd M Y'); ?></time>
+            <?php endif; ?>
+            <?php if ($canEdit) : ?>
+                <?php foreach ($statusLabels as $label) : ?>
+                    <em><?php echo htmlspecialchars($label, ENT_COMPAT, 'UTF-8'); ?></em>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
 
-	<?php // Content is generated by content plugin event "onContentAfterTitle" ?>
-	<?php if (!$params->get('show_intro')) : echo $this->item->event->afterDisplayTitle; endif; ?>
-	<?php // Content is generated by content plugin event "onContentBeforeDisplay" ?>
-	<?php echo $this->item->event->beforeDisplayContent; ?>
+        <?php if ($info == 0 && $params->get('show_tags', 1) && !empty($this->item->tags->itemTags)) : ?>
+            <div class="sf-article__tags">
+                <?php $this->item->tagLayout = new FileLayout('joomla.content.tags'); ?>
+                <?php echo $this->item->tagLayout->render($this->item->tags->itemTags); ?>
+            </div>
+        <?php endif; ?>
+    </header>
 
-	<?php if (isset($urls) && ((!empty($urls->urls_position) && ($urls->urls_position == '0')) || ($params->get('urls_position') == '0' && empty($urls->urls_position)))
-		|| (empty($urls->urls_position) && (!$params->get('urls_position')))) : ?>
-	<?php echo $this->loadTemplate('links'); ?>
-	<?php endif; ?>
-	<?php if ($params->get('access-view')):?>
-	<?php if (isset($images->image_fulltext) && !empty($images->image_fulltext)) : ?>
-	<?php $imgfloat = (empty($images->float_fulltext)) ? $params->get('float_fulltext') : $images->float_fulltext; ?>
-        <?php $class = 'img-fluid'; ?>
-	<div class="pull-<?php echo htmlspecialchars($imgfloat); ?> item-image"> <img
-	<?php if ($images->image_fulltext_caption){
-            $class .= ' caption';
-            echo 'title="' . htmlspecialchars($images->image_fulltext_caption) . '"';
-        } ?>
-	src="<?php echo htmlspecialchars($images->image_fulltext); ?>" alt="<?php echo htmlspecialchars($images->image_fulltext_alt); ?>" itemprop="image" class="<?php echo $class;?>"/> </div>
-	<?php endif; ?>
-	<?php
-	if (!empty($this->item->pagination) && $this->item->pagination && !$this->item->paginationposition && !$this->item->paginationrelative):
-		echo $this->item->pagination;
-	endif;
-	?>
-	<?php if (isset ($this->item->toc)) :
-		echo $this->item->toc;
-	endif; ?>
-	<div itemprop="articleBody">
-		<?php echo $this->item->text; ?>
-	</div>
+    <?php if (!empty($this->item->pagination) && $this->item->pagination && !$this->item->paginationposition && $this->item->paginationrelative) : ?>
+        <div class="sf-article__pagination"><?php echo $this->item->pagination; ?></div>
+    <?php endif; ?>
 
-	<?php if ($info == 1 || $info == 2) : ?>
-		<?php if ($useDefList) : ?>
-			<?php echo JLayoutHelper::render('joomla.content.info_block.block', array('item' => $this->item, 'params' => $params, 'position' => 'below')); ?>
-		<?php endif; ?>
-		<?php if ($params->get('show_tags', 1) && !empty($this->item->tags->itemTags)) : ?>
-			<?php $this->item->tagLayout = new JLayoutFile('joomla.content.tags'); ?>
-			<?php echo $this->item->tagLayout->render($this->item->tags->itemTags); ?>
-		<?php endif; ?>
-	<?php endif; ?>
+    <?php if (!$params->get('show_intro')) : ?>
+        <?php echo $this->item->event->afterDisplayTitle; ?>
+    <?php endif; ?>
 
-	<?php
-	if (!empty($this->item->pagination) && $this->item->pagination && $this->item->paginationposition && !$this->item->paginationrelative):
-		echo $this->item->pagination;
-	?>
-	<?php endif; ?>
-	<?php if (isset($urls) && ((!empty($urls->urls_position) && ($urls->urls_position == '1')) || ($params->get('urls_position') == '1'))) : ?>
-	<?php echo $this->loadTemplate('links'); ?>
-	<?php endif; ?>
-	<?php // Optional teaser intro text for guests ?>
-	<?php elseif ($params->get('show_noauth') == true && $user->get('guest')) : ?>
-	<?php echo $this->item->introtext; ?>
-	<?php // Optional link to let them register to see the whole article. ?>
-	<?php if ($params->get('show_readmore') && $this->item->fulltext != null) : ?>
-	<?php $menu = JFactory::getApplication()->getMenu(); ?>
-	<?php $active = $menu->getActive(); ?>
-	<?php $itemId = $active->id; ?>
-	<?php $link = new JUri(JRoute::_('index.php?option=com_users&view=login&Itemid=' . $itemId, false)); ?>
-	<?php $link->setVar('return', base64_encode(JRoute::_(ContentHelperRoute::getArticleRoute($this->item->slug, $this->item->catid, $this->item->language), false))); ?>
-	<p class="readmore">
-		<a href="<?php echo $link; ?>" class="register">
-		<?php $attribs = json_decode($this->item->attribs); ?>
-		<?php
-		if ($attribs->alternative_readmore == null) :
-			echo JText::_('COM_CONTENT_REGISTER_TO_READ_MORE');
-		elseif ($readmore = $this->item->alternative_readmore) :
-			echo $readmore;
-			if ($params->get('show_readmore_title', 0) != 0) :
-				echo JHtml::_('string.truncate', ($this->item->title), $params->get('readmore_limit'));
-			endif;
-		elseif ($params->get('show_readmore_title', 0) == 0) :
-			echo JText::sprintf('COM_CONTENT_READ_MORE_TITLE');
-		else :
-			echo JText::_('COM_CONTENT_READ_MORE');
-			echo JHtml::_('string.truncate', ($this->item->title), $params->get('readmore_limit'));
-		endif; ?>
-		</a>
-	</p>
-	<?php endif; ?>
-	<?php endif; ?>
-	<?php
-	if (!empty($this->item->pagination) && $this->item->pagination && $this->item->paginationposition && $this->item->paginationrelative) :
-		echo $this->item->pagination;
-	?>
-	<?php endif; ?>
-	<?php // Content is generated by content plugin event "onContentAfterDisplay" ?>
-	<?php echo $this->item->event->afterDisplayContent; ?>
-</div>
+    <?php echo $this->item->event->beforeDisplayContent; ?>
+
+    <?php if (
+        isset($urls) && ((!empty($urls->urls_position) && $urls->urls_position == '0') || ($params->get('urls_position') == '0' && empty($urls->urls_position)))
+        || (empty($urls->urls_position) && !$params->get('urls_position'))
+    ) : ?>
+        <?php echo $this->loadTemplate('links'); ?>
+    <?php endif; ?>
+
+    <?php if ($params->get('access-view')) : ?>
+        <?php if ($fullImage !== '') : ?>
+            <figure class="sf-article__image">
+                <img src="<?php echo htmlspecialchars($fullImage, ENT_COMPAT, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($fullImageAlt, ENT_COMPAT, 'UTF-8'); ?>" itemprop="image">
+                <?php if (is_object($images) && !empty($images->image_fulltext_caption)) : ?>
+                    <figcaption><?php echo htmlspecialchars($images->image_fulltext_caption, ENT_COMPAT, 'UTF-8'); ?></figcaption>
+                <?php endif; ?>
+            </figure>
+        <?php endif; ?>
+
+        <?php if (!empty($this->item->pagination) && $this->item->pagination && !$this->item->paginationposition && !$this->item->paginationrelative) : ?>
+            <div class="sf-article__pagination"><?php echo $this->item->pagination; ?></div>
+        <?php endif; ?>
+
+        <?php if (isset($this->item->toc)) : ?>
+            <div class="sf-article__toc"><?php echo $this->item->toc; ?></div>
+        <?php endif; ?>
+
+        <div class="sf-article__body" itemprop="articleBody">
+            <?php echo $this->item->text; ?>
+        </div>
+
+        <?php if ($info == 1 || $info == 2) : ?>
+            <?php if ($useDefList) : ?>
+                <div class="sf-article__info">
+                    <?php echo LayoutHelper::render('joomla.content.info_block.block', ['item' => $this->item, 'params' => $params, 'position' => 'below']); ?>
+                </div>
+            <?php endif; ?>
+            <?php if ($params->get('show_tags', 1) && !empty($this->item->tags->itemTags)) : ?>
+                <div class="sf-article__tags">
+                    <?php $this->item->tagLayout = new FileLayout('joomla.content.tags'); ?>
+                    <?php echo $this->item->tagLayout->render($this->item->tags->itemTags); ?>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+
+        <?php if (!empty($this->item->pagination) && $this->item->pagination && $this->item->paginationposition && !$this->item->paginationrelative) : ?>
+            <div class="sf-article__pagination"><?php echo $this->item->pagination; ?></div>
+        <?php endif; ?>
+
+        <?php if (isset($urls) && ((!empty($urls->urls_position) && $urls->urls_position == '1') || $params->get('urls_position') == '1')) : ?>
+            <?php echo $this->loadTemplate('links'); ?>
+        <?php endif; ?>
+    <?php elseif ($params->get('show_noauth') == true && $user->get('guest')) : ?>
+        <div class="sf-article__body">
+            <?php echo $this->item->introtext; ?>
+        </div>
+        <?php if ($params->get('show_readmore') && $this->item->fulltext != null) : ?>
+            <?php
+            $active = Factory::getApplication()->getMenu()->getActive();
+            $itemId = $active ? (int) $active->id : 0;
+            $link = new Uri(Route::_('index.php?option=com_users&view=login&Itemid=' . $itemId, false));
+            $link->setVar('return', base64_encode(RouteHelper::getArticleRoute($this->item->slug, $this->item->catid, $this->item->language)));
+            ?>
+            <p class="sf-article__login"><a href="<?php echo $link; ?>"><?php echo Text::_('COM_CONTENT_REGISTER_TO_READ_MORE'); ?></a></p>
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <?php if (!empty($this->item->pagination) && $this->item->pagination && $this->item->paginationposition && $this->item->paginationrelative) : ?>
+        <div class="sf-article__pagination"><?php echo $this->item->pagination; ?></div>
+    <?php endif; ?>
+
+    <?php echo $this->item->event->afterDisplayContent; ?>
+</article>

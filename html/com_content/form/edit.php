@@ -9,11 +9,11 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.tabstate');
-JHtml::_('behavior.keepalive');
-JHtml::_('behavior.calendar');
-JHtml::_('behavior.formvalidator');
-JHtml::_('formbehavior.chosen', 'select');
+HTMLHelper::_('behavior.tabstate');
+HTMLHelper::_('behavior.keepalive');
+HTMLHelper::_('behavior.calendar');
+HTMLHelper::_('behavior.formvalidator');
+HTMLHelper::_('formbehavior.chosen', 'select');
 
 // Create shortcut to parameters.
 $params = $this->state->get('params');
@@ -26,7 +26,7 @@ if (!$editoroptions)
 	$params->show_urls_images_frontend = '0';
 }
 
-JFactory::getDocument()->addScriptDeclaration("
+Factory::getDocument()->addScriptDeclaration("
 	Joomla.submitbutton = function(task)
 	{
 		if (task == 'article.cancel' || document.formvalidator.isValid(document.getElementById('adminForm')))
@@ -39,21 +39,21 @@ JFactory::getDocument()->addScriptDeclaration("
 ?>
 <div class="edit item-page<?php echo $this->pageclass_sfx; ?>">
 	<?php if ($params->get('show_page_heading')) : ?>
-	<div class="page-header">
+	<div>
 		<h1>
 			<?php echo $this->escape($params->get('page_heading')); ?>
 		</h1>
 	</div>
 	<?php endif; ?>
 
-	<form action="<?php echo JRoute::_('index.php?option=com_content&a_id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-vertical">
+	<form action="<?php echo Route::_('index.php?option=com_content&a_id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-vertical">
 		<div class="">
 			<p class="">
-				<button type="button" class="btn btn-primary" onclick="Joomla.submitbutton('article.save')">
-					<span class="fa fa-floppy-o"></span> <?php echo JText::_('JSAVE') ?>
+				<button type="button" class="sf-button sf-button--yellow" onclick="Joomla.submitbutton('article.save')">
+					<span class="fa fa-floppy-o"></span> <?php echo Text::_('JSAVE') ?>
 				</button> 
-				<button type="button" class="btn btn-secondary" onclick="Joomla.submitbutton('article.cancel')">
-					<span class="fa fa-times"></span> <?php echo JText::_('JCANCEL') ?>
+				<button type="button" class="sf-button sf-button--outline-dark" onclick="Joomla.submitbutton('article.cancel')">
+					<span class="fa fa-times"></span> <?php echo Text::_('JCANCEL') ?>
 				</button>
 			</p>
 			<?php if ($params->get('save_history', 0) && $this->item->id) : ?>
@@ -64,16 +64,16 @@ JFactory::getDocument()->addScriptDeclaration("
 		</div>
 		<fieldset>
 			<ul class="nav nav-tabs">
-				<li class="nav-item"><a class="nav-link active" href="#editor" data-toggle="tab"><?php echo JText::_('COM_CONTENT_ARTICLE_CONTENT') ?></a></li>
+				<li class="nav-item"><a class="nav-link active" href="#editor" data-toggle="tab"><?php echo Text::_('COM_CONTENT_ARTICLE_CONTENT') ?></a></li>
 				<?php if ($params->get('show_urls_images_frontend') ) : ?>
-				<li class="nav-item"><a class="nav-link" href="#images" data-toggle="tab"><?php echo JText::_('COM_CONTENT_IMAGES_AND_URLS') ?></a></li>
+				<li class="nav-item"><a class="nav-link" href="#images" data-toggle="tab"><?php echo Text::_('COM_CONTENT_IMAGES_AND_URLS') ?></a></li>
 				<?php endif; ?>
 				<?php foreach ($this->form->getFieldsets('params') as $name => $fieldSet) : ?>
-				<li class="nav-item"><a class="nav-link" href="#params-<?php echo $name; ?>" data-toggle="tab"><?php echo JText::_($fieldSet->label); ?></a></li>
+				<li class="nav-item"><a class="nav-link" href="#params-<?php echo $name; ?>" data-toggle="tab"><?php echo Text::_($fieldSet->label); ?></a></li>
 				<?php endforeach; ?>
-				<li class="nav-item"><a class="nav-link" href="#publishing" data-toggle="tab"><?php echo JText::_('COM_CONTENT_PUBLISHING') ?></a></li>
-				<li class="nav-item"><a class="nav-link" href="#language" data-toggle="tab"><?php echo JText::_('JFIELD_LANGUAGE_LABEL') ?></a></li>
-				<li class="nav-item"><a class="nav-link" href="#metadata" data-toggle="tab"><?php echo JText::_('COM_CONTENT_METADATA') ?></a></li>
+				<li class="nav-item"><a class="nav-link" href="#publishing" data-toggle="tab"><?php echo Text::_('COM_CONTENT_PUBLISHING') ?></a></li>
+				<li class="nav-item"><a class="nav-link" href="#language" data-toggle="tab"><?php echo Text::_('JFIELD_LANGUAGE_LABEL') ?></a></li>
+				<li class="nav-item"><a class="nav-link" href="#metadata" data-toggle="tab"><?php echo Text::_('COM_CONTENT_METADATA') ?></a></li>
 			</ul>
 
 			<div class="tab-content">
@@ -145,7 +145,7 @@ JFactory::getDocument()->addScriptDeclaration("
 							<div class="control-label">
 							</div>
 							<div class="controls">
-								<?php echo JText::_('COM_CONTENT_ORDERING'); ?>
+								<?php echo Text::_('COM_CONTENT_ORDERING'); ?>
 							</div>
 						</div>
 					<?php endif; ?>
@@ -164,7 +164,7 @@ JFactory::getDocument()->addScriptDeclaration("
 					<?php endif; ?>
 				</div>
 			</div>
-			<?php echo JHtml::_('form.token'); ?>
+			<?php echo HTMLHelper::_('form.token'); ?>
 		</fieldset>
 	</form>
 </div>

@@ -1,111 +1,135 @@
+(function () {
+  function ready(fn) {
+    if (document.readyState !== 'loading') {
+      fn();
+      return;
+    }
+    document.addEventListener('DOMContentLoaded', fn);
+  }
 
-(function($)
-{
-      $(window).on("load resize", function() {
+  ready(function () {
+    var header = document.querySelector('[data-sf-header]');
+    var nav = document.querySelector('[data-sf-nav]');
+    var navToggle = document.querySelector('[data-sf-nav-toggle]');
+    var backdrop = document.querySelector('[data-sf-menu-backdrop]');
+    var closeTimer = null;
 
-            if (this.matchMedia("(min-width: 991.98px)").matches) {
-                  jQuery(".dropdown").hover(
-                        function() {
-                              jQuery(this).addClass("show");
-                              jQuery(this).find(".dropdown-toggle:first").attr("aria-expanded", "true");
-                              jQuery(this).find(".dropdown-menu:first").addClass("show");
-                        },
-                        function() {
-                              jQuery(this).removeClass("show");
-                              jQuery(this).find(".dropdown-toggle").attr("aria-expanded", "false");
-                              jQuery(this).find(".dropdown-menu").removeClass("show");
-                        }
-                  );
-            } else {
-                  jQuery(".dropdown").off("mouseenter mouseleave");
-            }
-      });
-      
-      $('a.dropdown-toggle').on('click', function(e) {
-            if (window.matchMedia("(max-width: 991.98px)").matches) {
-
-                  if (!$(this).next().hasClass('show')) {
-                        $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
-                  }
-                  var $subMenu = $(this).next(".dropdown-menu");
-                  $subMenu.toggleClass('show');
-            
-            
-                  $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
-                        $('.dropdown-submenu .show').removeClass("show");
-                  });
-            
-                  return false;
-            }
+    function closeMenus() {
+      document.querySelectorAll('.sf-nav__item.is-open').forEach(function (item) {
+        item.classList.remove('is-open');
+        var trigger = item.querySelector('[data-sf-menu-trigger]');
+        if (trigger) {
+          trigger.setAttribute('aria-expanded', 'false');
+        }
       });
 
-      //Change position for drop down
-      $(".dropdown li").on('mouseenter mouseleave', function (e) {
-          if ($('.dropdown-menu', this).length) {
-              var elm = $('.dropdown-menu', this);
-              var off = elm.offset();
-              var l = off.left;
-              var w = elm.width();
-              var docW = $(window).width();
-  
-              var isEntirelyVisible = (l + w <= docW);
-  
-              if (!isEntirelyVisible) {
-                  $(elm).addClass('dropdown-reverse');
-              } 
-            //   else {
-            //       $(elm).removeClass('dropdown-reverse');
-            //   }
+      if (header) {
+        header.classList.remove('has-open-menu');
+      }
+    }
+
+    function openMenu(item) {
+      if (closeTimer) {
+        clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+
+      closeMenus();
+      item.classList.add('is-open');
+
+      var trigger = item.querySelector('[data-sf-menu-trigger]');
+      if (trigger) {
+        trigger.setAttribute('aria-expanded', 'true');
+      }
+
+      if (header && window.matchMedia('(min-width: 981px)').matches) {
+        header.classList.add('has-open-menu');
+      }
+    }
+
+    document.querySelectorAll('.sf-nav__item.has-menu').forEach(function (item) {
+      var trigger = item.querySelector('[data-sf-menu-trigger]');
+      var menu = item.querySelector('[data-sf-menu]');
+
+      item.addEventListener('mouseenter', function () {
+        if (window.matchMedia('(min-width: 981px)').matches) {
+          openMenu(item);
+        }
+      });
+
+      item.addEventListener('mouseleave', function () {
+        if (window.matchMedia('(min-width: 981px)').matches) {
+          closeTimer = setTimeout(closeMenus, 120);
+        }
+      });
+
+      if (menu) {
+        menu.addEventListener('mouseenter', function () {
+          if (closeTimer) {
+            clearTimeout(closeTimer);
+            closeTimer = null;
           }
+        });
+      }
+
+      if (trigger) {
+        trigger.addEventListener('click', function (event) {
+          event.preventDefault();
+          if (item.classList.contains('is-open')) {
+            closeMenus();
+          } else {
+            openMenu(item);
+          }
+        });
+      }
+    });
+
+    if (navToggle && header && nav) {
+      navToggle.addEventListener('click', function () {
+        var isOpen = header.classList.toggle('is-mobile-open');
+        navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        if (!isOpen) {
+          closeMenus();
+        }
       });
+    }
 
+    if (backdrop) {
+      backdrop.addEventListener('click', closeMenus);
+    }
 
-	$(document).ready(function()
-	{
-            $('.control-group').addClass('form-group');
-            $('.control-group input[type=text]').addClass('form-control');
-            $('.control-group input[type=email]').addClass('form-control');
-            $('.control-group input[type=password]').addClass('form-control');
-            $('.control-group input[type=search]').addClass('form-control');
-            $('.control-group input[type=url]').addClass('form-control');
-            $('.control-group input[type=tel]').addClass('form-control');
-            $('.control-group input[type=number]').addClass('form-control');
-            $('.control-group input[type=date]').addClass('form-control');
-            $('.control-group input[type=datetime-local]').addClass('form-control');
-            $('.control-group input[type=month]').addClass('form-control');
-            $('.control-group input[type=week]').addClass('form-control');
-            $('.control-group input[type=time]').addClass('form-control');
-            $('.control-group input[type=color]').addClass('form-control');
-            $('.control-group select').addClass('form-control');
-            $('.control-group textarea').addClass('form-control');
-            $('.control-group input[type=file]').addClass('form-control-file');
-            //$('.control-group input[type=radio]').addClass('form-check-input'); //Would require reformatting of html-structure
-            $('.control-group input[type=checkbox]').addClass('form-check-input');
-            
-            $('.form-group input[type=text]').addClass('form-control');
-            $('.form-group input[type=email]').addClass('form-control');
-            $('.form-group input[type=password]').addClass('form-control');
-            $('.form-group input[type=search]').addClass('form-control');
-            $('.form-group input[type=url]').addClass('form-control');
-            $('.form-group input[type=tel]').addClass('form-control');
-            $('.form-group input[type=number]').addClass('form-control');
-            $('.form-group input[type=date]').addClass('form-control');
-            $('.form-group input[type=datetime-local]').addClass('form-control');
-            $('.form-group input[type=month]').addClass('form-control');
-            $('.form-group input[type=week]').addClass('form-control');
-            $('.form-group input[type=time]').addClass('form-control');
-            $('.form-group input[type=color]').addClass('form-control');
-            $('.form-group select').addClass('form-control');
-            $('.form-group textarea').addClass('form-control');
-            $('.form-group input[type=file]').addClass('form-control-file');
-            $('.form-check input[type=checkbox]').addClass('form-check-input');
-            //Contact form
-            $('.form-inline select').addClass('form-control form-control-sm');
-            // Support for bootstrap 4 markup also in custom UI elements, which are designed for Bootstrap 2. 
-            $('table').addClass('table');
-            $('.label').addClass('badge');
-            $('.label-warning').addClass('badge-warning');
-            //$('*[rel=tooltip]').tooltip()
-      });
-})(jQuery);
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        closeMenus();
+        if (header && header.classList.contains('is-mobile-open')) {
+          header.classList.remove('is-mobile-open');
+          if (navToggle) {
+            navToggle.setAttribute('aria-expanded', 'false');
+          }
+        }
+      }
+    });
 
+    window.addEventListener('resize', function () {
+      closeMenus();
+      if (window.matchMedia('(min-width: 981px)').matches && header && navToggle) {
+        header.classList.remove('is-mobile-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.querySelectorAll('.control-group').forEach(function (group) {
+      group.classList.add('form-group');
+    });
+
+    document.querySelectorAll(
+      '.control-group input[type=text], .control-group input[type=email], .control-group input[type=password], .control-group input[type=search], .control-group input[type=url], .control-group input[type=tel], .control-group input[type=number], .control-group input[type=date], .control-group select, .control-group textarea'
+    ).forEach(function (field) {
+      field.classList.add('form-control');
+    });
+
+    document.querySelectorAll('table').forEach(function (table) {
+      table.classList.add('table');
+    });
+  });
+})();

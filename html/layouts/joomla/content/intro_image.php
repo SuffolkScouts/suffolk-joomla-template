@@ -7,7 +7,11 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('JPATH_BASE') or die;
+defined('_JEXEC') or die;
+
+use Joomla\CMS\Router\Route;
+use Joomla\Component\Content\Site\Helper\RouteHelper;
+
 $params  = $displayData->params;
 $class = 'img-fluid';
 ?>
@@ -16,7 +20,7 @@ $class = 'img-fluid';
 	<?php $imgfloat = (empty($images->float_intro)) ? $params->get('float_intro') : $images->float_intro; ?>
 	<div class="pull-<?php echo htmlspecialchars($imgfloat); ?> item-image"> 
 	<?php if ($params->get('link_titles') && $params->get('access-view')) : ?>
-	<a href="<?php echo JRoute::_(ContentHelperRoute::getArticleRoute($displayData->slug, $displayData->catid, $displayData->language)); ?>"><img
+	<a href="<?php echo Route::_(RouteHelper::getArticleRoute($displayData->slug, $displayData->catid, $displayData->language)); ?>"><img
 	<?php if ($images->image_intro_caption):
                 $class .= ' caption';
 		echo ' title="' . htmlspecialchars($images->image_intro_caption) . '"';

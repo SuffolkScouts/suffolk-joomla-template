@@ -20,7 +20,7 @@ defined('_JEXEC') or die;
  * @var   string   $path     Path to this file
  */
 
-$uri = clone JUri::getInstance();
+$uri = clone Uri::getInstance();
 $uri->setVar('hitcount', '0');
 
 // Create option list for voting select box
@@ -28,18 +28,18 @@ $options = array();
 
 for ($i = 1; $i < 6; $i++)
 {
-	$options[] = JHtml::_('select.option', $i, JText::sprintf('PLG_VOTE_VOTE', $i));
+	$options[] = HTMLHelper::_('select.option', $i, Text::sprintf('PLG_VOTE_VOTE', $i));
 }
 
 ?>
 <form method="post" action="<?php echo htmlspecialchars($uri->toString(), ENT_COMPAT, 'UTF-8'); ?>">
 	<span class="content_vote form-inline">
-		<label class="unseen element-invisible mr-sm-2" for="content_vote_<?php echo (int) $row->id; ?>"><?php echo JText::_('PLG_VOTE_LABEL'); ?></label>
-		<?php echo JHtml::_('select.genericlist', $options, 'user_rating', 'class="mr-sm-2"', 'value', 'text', '5', 'content_vote_' . (int) $row->id); ?>
-		<input class="btn btn-secondary btn-sm my-2 my-sm-0" type="submit" name="submit_vote" value="<?php echo JText::_('PLG_VOTE_RATE'); ?>" />
+		<label class="unseen visually-hidden mr-sm-2" for="content_vote_<?php echo (int) $row->id; ?>"><?php echo Text::_('PLG_VOTE_LABEL'); ?></label>
+		<?php echo HTMLHelper::_('select.genericlist', $options, 'user_rating', 'class="mr-sm-2"', 'value', 'text', '5', 'content_vote_' . (int) $row->id); ?>
+		<input class="sf-button sf-button--outline-dark sf-button--sm" type="submit" name="submit_vote" value="<?php echo Text::_('PLG_VOTE_RATE'); ?>" />
 		<input type="hidden" name="task" value="article.vote" />
 		<input type="hidden" name="hitcount" value="0" />
 		<input type="hidden" name="url" value="<?php echo htmlspecialchars($uri->toString(), ENT_COMPAT, 'UTF-8'); ?>" />
-		<?php echo JHtml::_('form.token'); ?>
+		<?php echo HTMLHelper::_('form.token'); ?>
 	</span>
 </form>

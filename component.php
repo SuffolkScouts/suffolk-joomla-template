@@ -1,40 +1,33 @@
 <?php
-/**
- * @package     Joomla.Site
- * @subpackage  Templates.protostar
- *
- * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
- */
-
 defined('_JEXEC') or die;
 
-$app             = JFactory::getApplication();
-$doc             = JFactory::getDocument();
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+
+$app = Factory::getApplication();
+$doc = Factory::getDocument();
+
 $this->language  = $doc->language;
 $this->direction = $doc->direction;
 
-// Add JavaScript Frameworks
-JHtml::_('bootstrap.framework');
+$base        = rtrim($this->baseurl, '/');
+$templateUrl = $base . '/templates/' . $this->template;
+$templatePath = __DIR__;
+$cssVersion  = is_file($templatePath . '/css/template.css') ? filemtime($templatePath . '/css/template.css') : time();
 
-// Add Stylesheets
-$doc->addStyleSheet($this->baseurl . '/templates/' . $this->template . '/css/template.css');
+$doc->addStyleSheet($templateUrl . '/css/template.css?v=' . $cssVersion);
 
-// Load optional rtl Bootstrap css and Bootstrap bugfixes
-JHtmlBootstrap::loadCss($includeMaincss = false, $this->direction);
-
+HTMLHelper::_('jquery.framework');
 ?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
+<!doctype html>
+<html lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<jdoc:include type="head" />
-<!--[if lt IE 9]>
-	<script src="<?php echo JUri::root(true); ?>/media/jui/js/html5.js"></script>
-<![endif]-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <jdoc:include type="head" />
 </head>
-<body class="contentpane modal">
-	<jdoc:include type="message" />
-	<jdoc:include type="component" />
+<body class="sf-component-modal">
+    <jdoc:include type="message" />
+    <jdoc:include type="component" />
 </body>
 </html>

@@ -9,5 +9,6 @@
 
 defined('_JEXEC') or die;
 
-JLog::add('The layout joomla.content.info_block.block is deprecated, use joomla.content.info_block instead.', JLog::WARNING, 'deprecated');
-echo JLayoutHelper::render('joomla.content.info_block', $displayData);
+use Joomla\CMS\Layout\LayoutHelper;
+
+echo LayoutHelper::render('joomla.content.info_block', $displayData);

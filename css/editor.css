@@ -1,0 +1,271 @@
+/*
+ * Suffolk Scouts – editor content CSS
+ * Loaded by TinyMCE / JCE so the WYSIWYG preview matches the front-end.
+ */
+
+:root {
+  --sf-purple:   #4c1f7a;
+  --sf-teal:     #00a499;
+  --sf-yellow:   #ffdd00;
+  --sf-ink:      #101820;
+  --sf-ink-soft: #3b4252;
+  --sf-muted:    #6a7380;
+  --sf-line:     #e4e2dd;
+  --sf-cream:    #f7f5f0;
+  --sf-paper:    #ffffff;
+  --sf-font:     "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800;1,900&display=swap');
+
+html,
+body {
+  margin: 24px;
+  background: var(--sf-paper);
+  color: var(--sf-ink);
+  font-family: var(--sf-font);
+  font-size: 17px;
+  line-height: 1.72;
+}
+
+/* Force template font over anything the editor injects */
+span[style],
+font,
+p[style],
+h1[style], h2[style], h3[style], h4[style],
+li[style], td[style], th[style] {
+  font-family: var(--sf-font) !important;
+}
+
+span[style*="font-size"],
+font[size] {
+  font-size: inherit !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--sf-ink);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1.15;
+}
+
+h1 { font-size: 36px; margin: 1.6em 0 0.6em; }
+h2 { font-size: 32px; margin: 1.55em 0 0.55em; }
+h3 { font-size: 24px; margin: 1.35em 0 0.45em; }
+h4 { font-size: 19px; margin: 1.25em 0 0.4em; }
+h5 { font-size: 17px; margin: 1.2em 0 0.35em; }
+h6 { font-size: 15px; margin: 1.15em 0 0.3em; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Paragraph & block spacing */
+p, ul, ol, table, blockquote, pre, details {
+  margin-top: 0;
+  margin-bottom: 1.15em;
+}
+
+/* Links */
+a {
+  color: var(--sf-purple);
+  font-weight: 800;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+/* Lists */
+ul, ol {
+  padding-left: 1.6em;
+}
+
+li {
+  margin-bottom: 0.4em;
+}
+
+li > ul,
+li > ol {
+  margin-top: 0.4em;
+  margin-bottom: 0;
+}
+
+/* Inline elements */
+strong, b { font-weight: 800; }
+
+mark {
+  background: rgba(255, 221, 0, 0.45);
+  border-radius: 2px;
+  padding: 1px 3px;
+  color: inherit;
+}
+
+del, s { opacity: 0.6; }
+
+abbr[title] {
+  cursor: help;
+  text-decoration: underline dotted;
+}
+
+/* Rule */
+hr {
+  border: none;
+  border-top: 2px solid var(--sf-line);
+  margin: 2em 0;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+img[style*="float: left"],
+img[style*="float:left"]  { margin: 0.35em 1.4em 1em 0; }
+img[style*="float: right"],
+img[style*="float:right"] { margin: 0.35em 0 1em 1.4em; }
+
+figure { margin: 1.5em 0; }
+
+figcaption {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--sf-muted);
+  text-align: center;
+}
+
+/* Blockquote */
+blockquote {
+  border-left: 5px solid var(--sf-yellow);
+  background: var(--sf-cream);
+  border-radius: 0 8px 8px 0;
+  padding: 18px 22px;
+  font-weight: 700;
+  font-style: normal;
+  margin-inline: 0;
+}
+
+blockquote p:last-child { margin-bottom: 0; }
+
+/* Code */
+code, kbd, samp {
+  background: var(--sf-cream);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.88em;
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--sf-purple);
+}
+
+pre {
+  background: var(--sf-cream);
+  border: 1px solid var(--sf-line);
+  border-radius: 8px;
+  padding: 18px 20px;
+  overflow-x: auto;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+pre code {
+  background: none;
+  border-radius: 0;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+thead { border-bottom: 2px solid var(--sf-line); }
+
+th, td {
+  border-bottom: 1px solid var(--sf-line);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: var(--sf-cream);
+  font-weight: 900;
+}
+
+tr:last-child td { border-bottom: none; }
+
+/* Bootstrap text utilities */
+.text-center  { text-align: center; }
+.text-right,
+.text-end     { text-align: right; }
+.text-left,
+.text-start   { text-align: left; }
+.text-justify { text-align: justify; }
+
+/* Bootstrap floats */
+.float-right, .float-end  { float: right; margin: 0 0 1em 1.4em; }
+.float-left,  .float-start { float: left; margin: 0 1.4em 1em 0; }
+.clearfix::after { content: ""; display: table; clear: both; }
+
+/* Bootstrap images */
+.img-fluid,
+.img-responsive { max-width: 100%; height: auto; }
+
+/* Bootstrap grid */
+.container, .container-fluid { width: 100%; }
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-inline: -10px;
+}
+
+[class*="col-"] {
+  padding-inline: 10px;
+  width: 100%;
+  min-width: 0;
+}
+
+.col-sm-6, .col-md-6, .col-lg-6 { width: 50%; }
+.col-sm-4, .col-md-4, .col-lg-4 { width: 33.333%; }
+.col-sm-3, .col-md-3, .col-lg-3 { width: 25%; }
+.col-sm-8, .col-md-8, .col-lg-8 { width: 66.667%; }
+.col-sm-9, .col-md-9, .col-lg-9 { width: 75%; }
+.col-sm-12, .col-md-12, .col-lg-12 { width: 100%; }
+
+/* Bootstrap wells / cards */
+.well,
+.card,
+.card-body {
+  background: var(--sf-cream);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 1.15em;
+}
+
+/* Bootstrap alerts */
+.alert {
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 1.15em;
+  border-left: 4px solid transparent;
+}
+
+.alert-info    { background: #f3eefa; border-color: var(--sf-purple); }
+.alert-success { background: #e6f7f6; border-color: var(--sf-teal); }
+.alert-warning { background: #fff8e6; border-color: #e8a000; }
+.alert-danger,
+.alert-error   { background: #fdf0ee; border-color: #c0392b; }
+
+/* Bootstrap badges / labels */
+.badge,
+.label {
+  display: inline-block;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 800;
+  background: var(--sf-purple);
+  color: #fff;
+}

@@ -33,11 +33,11 @@ if ($item->menu_image)
 	if ($item->menu_image_css)
 	{
 		$image_attributes['class'] = $item->menu_image_css;
-		$linktype = JHtml::_('image', $item->menu_image, $item->title, $image_attributes);
+		$linktype = HTMLHelper::_('image', $item->menu_image, $item->title, $image_attributes);
 	}
 	else
 	{
-		$linktype = JHtml::_('image', $item->menu_image, $item->title);
+		$linktype = HTMLHelper::_('image', $item->menu_image, $item->title);
 	}
 
 	if ($item->params->get('menu_text', 1))
@@ -68,4 +68,4 @@ if($item->data)
 	$attributes['data-toggle'] = "dropdown";
 }
 
-echo JHtml::_('link', JFilterOutput::ampReplace(htmlspecialchars($item->flink, ENT_COMPAT, 'UTF-8', false)), $linktype, $attributes);
+echo HTMLHelper::_('link', JFilterOutput::ampReplace(htmlspecialchars($item->flink, ENT_COMPAT, 'UTF-8', false)), $linktype, $attributes);

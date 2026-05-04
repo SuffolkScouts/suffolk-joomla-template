@@ -1,229 +1,100 @@
 <?php
-/**
- * @package     Joomla.Site
- * @subpackage  Templates.protostar
- *
- * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
- */
-
 defined('_JEXEC') or die;
 
-/**
- * This is a file to add template specific chrome to pagination rendering.
- *
- * pagination_list_footer
- * 	Input variable $list is an array with offsets:
- * 		$list[limit]		: int
- * 		$list[limitstart]	: int
- * 		$list[total]		: int
- * 		$list[limitfield]	: string
- * 		$list[pagescounter]	: string
- * 		$list[pageslinks]	: string
- *
- * pagination_list_render
- * 	Input variable $list is an array with offsets:
- * 		$list[all]
- * 			[data]		: string
- * 			[active]	: boolean
- * 		$list[start]
- * 			[data]		: string
- * 			[active]	: boolean
- * 		$list[previous]
- * 			[data]		: string
- * 			[active]	: boolean
- * 		$list[next]
- * 			[data]		: string
- * 			[active]	: boolean
- * 		$list[end]
- * 			[data]		: string
- * 			[active]	: boolean
- * 		$list[pages]
- * 			[{PAGE}][data]		: string
- * 			[{PAGE}][active]	: boolean
- *
- * pagination_item_active
- * 	Input variable $item is an object with fields:
- * 		$item->base	: integer
- * 		$item->link	: string
- * 		$item->text	: string
- *
- * pagination_item_inactive
- * 	Input variable $item is an object with fields:
- * 		$item->base	: integer
- * 		$item->link	: string
- * 		$item->text	: string
- *
- * This gives template designers ultimate control over how pagination is rendered.
- *
- * NOTE: If you override pagination_item_active OR pagination_item_inactive you MUST override them both
- */
+use Joomla\CMS\Language\Text;
 
-/**
- * Renders the pagination footer
- *
- * @param   array   $list  Array containing pagination footer
- *
- * @return  string         HTML markup for the full pagination footer
- *
- * @since   3.0
- */
 function pagination_list_footer($list)
 {
-	$html = "<div class=\"pagination\">\n";
-	$html .= $list['pageslinks'];
-	$html .= "\n<input type=\"hidden\" name=\"" . $list['prefix'] . "limitstart\" value=\"" . $list['limitstart'] . "\" />";
-	$html .= "\n</div>";
+    $html  = '<div class="sf-pagination">';
+    $html .= $list['pageslinks'];
+    $html .= '<input type="hidden" name="' . $list['prefix'] . 'limitstart" value="' . $list['limitstart'] . '">';
+    $html .= '</div>';
 
-	return $html;
+    return $html;
 }
 
-/**
- * Renders the pagination list
- *
- * @param   array   $list  Array containing pagination information
- *
- * @return  string         HTML markup for the full pagination object
- *
- * @since   3.0
- */
 function pagination_list_render($list)
 {
-	// Calculate to display range of pages
-	$currentPage = 1;
-	$range = 1;
-	$step = 5;
-	foreach ($list['pages'] as $k => $page)
-	{
-		if (!$page['active'])
-		{
-			$currentPage = $k;
-		}
-	}
-	if ($currentPage >= $step)
-	{
-		if ($currentPage % $step == 0)
-		{
-			$range = ceil($currentPage / $step) + 1;
-		}
-		else
-		{
-			$range = ceil($currentPage / $step);
-		}
-	}
+    $currentPage = 1;
+    $range = 1;
+    $step  = 5;
 
-	$html = '<ul class="pagination col-md-auto">';
-	$html .= $list['start']['data'];
-	$html .= $list['previous']['data'];
+    foreach ($list['pages'] as $k => $page) {
+        if (!$page['active']) {
+            $currentPage = $k;
+        }
+    }
 
-	foreach ($list['pages'] as $k => $page)
-	{
-		if (in_array($k, range($range * $step - ($step + 1), $range * $step)))
-		{
-			if (($k % $step == 0 || $k == $range * $step - ($step + 1)) && $k != $currentPage && $k != $range * $step - $step)
-			{
-				$page['data'] = preg_replace('#(<a.*?>).*?(</a>)#', '$1...$2', $page['data']);
-			}
-		}
+    if ($currentPage >= $step) {
+        $range = $currentPage % $step === 0
+            ? ceil($currentPage / $step) + 1
+            : ceil($currentPage / $step);
+    }
 
-		$html .= $page['data'];
-	}
+    $html  = '<ul class="sf-pagination__list">';
+    $html .= $list['start']['data'];
+    $html .= $list['previous']['data'];
 
-	$html .= $list['next']['data'];
-	$html .= $list['end']['data'];
+    foreach ($list['pages'] as $k => $page) {
+        if (in_array($k, range($range * $step - ($step + 1), $range * $step))) {
+            if (($k % $step === 0 || $k === $range * $step - ($step + 1)) && $k !== $currentPage && $k !== $range * $step - $step) {
+                $page['data'] = preg_replace('#(<a.*?>).*?(</a>)#', '$1...$2', $page['data']);
+            }
+        }
+        $html .= $page['data'];
+    }
 
-	$html .= '</ul>';
-	return $html;
+    $html .= $list['next']['data'];
+    $html .= $list['end']['data'];
+    $html .= '</ul>';
+
+    return $html;
 }
 
-/**
- * Renders an active item in the pagination block
- *
- * @param   JPaginationObject  $item  The current pagination object
- *
- * @return  string                    HTML markup for active item
- *
- * @since   3.0
- */
 function pagination_item_active(&$item)
 {
-	$class = ' class="page-item"';
+    $class   = ' class="sf-pagination__item"';
+    $display = null;
 
-	// Check for "Start" item
-	if ($item->text == JText::_('JLIB_HTML_START'))
-	{
-		$display = '<span class="fa fa-fast-backward"></span>';
-	}
+    if ($item->text === Text::_('JLIB_HTML_START')) {
+        $display = '<span class="fa fa-fast-backward" aria-hidden="true"></span>';
+    } elseif ($item->text === Text::_('JPREV')) {
+        $display = '<span class="fa fa-backward" aria-hidden="true"></span>';
+    } elseif ($item->text === Text::_('JNEXT')) {
+        $display = '<span class="fa fa-forward" aria-hidden="true"></span>';
+    } elseif ($item->text === Text::_('JLIB_HTML_END')) {
+        $display = '<span class="fa fa-fast-forward" aria-hidden="true"></span>';
+    }
 
-	// Check for "Prev" item
-	if ($item->text == JText::_('JPREV'))
-	{
-		$display = '<span class="fa fa-backward"></span>';
-	}
+    if ($display === null) {
+        $display = $item->text;
+        $class   = ' class="sf-pagination__item sf-pagination__item--page"';
+    }
 
-	// Check for "Next" item
-	if ($item->text == JText::_('JNEXT'))
-	{
-		$display = '<span class="fa fa-forward"></span>';
-	}
-
-	// Check for "End" item
-	if ($item->text == JText::_('JLIB_HTML_END'))
-	{
-		$display = '<span class="fa fa-fast-forward"></span>';
-	}
-
-	// If the display object isn't set already, just render the item with its text
-	if (!isset($display))
-	{
-		$display = $item->text;
-		$class   = ' class="hidden-phone page-item"';
-	}
-
-	return '<li' . $class . '><a title="' . $item->text . '" href="' . $item->link . '" class="pagenav page-link">' . $display . '</a></li>';
+    return '<li' . $class . '><a title="' . $item->text . '" href="' . $item->link . '" class="sf-pagination__link">' . $display . '</a></li>';
 }
 
-/**
- * Renders an inactive item in the pagination block
- *
- * @param   JPaginationObject  $item  The current pagination object
- *
- * @return  string  HTML markup for inactive item
- *
- * @since   3.0
- */
 function pagination_item_inactive(&$item)
 {
-	// Check for "Start" item
-	if ($item->text == JText::_('JLIB_HTML_START'))
-	{
-		return '<li class="disabled page-item"><a class="page-link"><span class="fa fa-fast-backward"></span></a></li>';
-	}
+    if ($item->text === Text::_('JLIB_HTML_START')) {
+        return '<li class="sf-pagination__item sf-pagination__item--disabled"><span class="sf-pagination__link"><span class="fa fa-fast-backward" aria-hidden="true"></span></span></li>';
+    }
 
-	// Check for "Prev" item
-	if ($item->text == JText::_('JPREV'))
-	{
-		return '<li class="disabled page-item"><a class="page-link"><span class="fa fa-backward"></span></a></li>';
-	}
+    if ($item->text === Text::_('JPREV')) {
+        return '<li class="sf-pagination__item sf-pagination__item--disabled"><span class="sf-pagination__link"><span class="fa fa-backward" aria-hidden="true"></span></span></li>';
+    }
 
-	// Check for "Next" item
-	if ($item->text == JText::_('JNEXT'))
-	{
-		return '<li class="disabled page-item"><a class="page-link"><span class="fa fa-forward"></span></a></li>';
-	}
+    if ($item->text === Text::_('JNEXT')) {
+        return '<li class="sf-pagination__item sf-pagination__item--disabled"><span class="sf-pagination__link"><span class="fa fa-forward" aria-hidden="true"></span></span></li>';
+    }
 
-	// Check for "End" item
-	if ($item->text == JText::_('JLIB_HTML_END'))
-	{
-		return '<li class="disabled page-item"><a class="page-link"><span class="fa fa-fast-forward"></span></a></li>';
-	}
+    if ($item->text === Text::_('JLIB_HTML_END')) {
+        return '<li class="sf-pagination__item sf-pagination__item--disabled"><span class="sf-pagination__link"><span class="fa fa-fast-forward" aria-hidden="true"></span></span></li>';
+    }
 
-	// Check if the item is the active page
-	if (isset($item->active) && ($item->active))
-	{
-		return '<li class="active hidden-phone page-item"><a class="page-link">' . $item->text . '</a></li>';
-	}
+    if (isset($item->active) && $item->active) {
+        return '<li class="sf-pagination__item sf-pagination__item--active sf-pagination__item--page"><span class="sf-pagination__link" aria-current="page">' . $item->text . '</span></li>';
+    }
 
-	// Doesn't match any other condition, render a normal item
-	return '<li class="disabled hidden-phone page-item"><a class="page-link">' . $item->text . '</a></li>';
+    return '<li class="sf-pagination__item sf-pagination__item--disabled sf-pagination__item--page"><span class="sf-pagination__link">' . $item->text . '</span></li>';
 }

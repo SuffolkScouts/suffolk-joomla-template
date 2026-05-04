@@ -9,16 +9,16 @@
 
 defined('_JEXEC') or die;
 
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
 
-//JHtml::_('behavior.caption');
+
+//HTMLHelper::_('behavior.caption');
 
 // If the page class is defined, add to class as suffix.
 // It will be a separate class if the user starts it with a space
 ?>
 <div class="blog-featured<?php echo $this->pageclass_sfx; ?>" itemscope itemtype="https://schema.org/Blog">
 <?php if ($this->params->get('show_page_heading') != 0) : ?>
-<div class="page-header">
+<div>
 	<h1>
 	<?php echo $this->escape($this->params->get('page_heading')); ?>
 	</h1>

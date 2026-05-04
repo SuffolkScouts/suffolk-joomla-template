@@ -75,11 +75,11 @@ if ($tagId = $params->get('tag_id', ''))
 		case 'heading':
 			
 		case 'url':
-			require JModuleHelper::getLayoutPath('mod_menu', 'default_' . $item->type);
+			require ModuleHelper::getLayoutPath('mod_menu', 'default_' . $item->type);
 			break;
 
 		default:
-			require JModuleHelper::getLayoutPath('mod_menu', 'default_url');
+			require ModuleHelper::getLayoutPath('mod_menu', 'default_url');
 			break;
 	endswitch;
 

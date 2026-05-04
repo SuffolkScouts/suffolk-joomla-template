@@ -28,10 +28,10 @@ if ($context == 'com_content.categories')
 $rating = (int) $row->rating;
 
 // Look for images in template if available
-//$starImageOn  = JHtml::_('image', 'system/rating_star.png', JText::_('PLG_VOTE_STAR_ACTIVE'), null, true);
-$starImageOn  = '<i class="fa fa-star text-warning" title="' . JText::_('PLG_VOTE_STAR_ACTIVE') . '"></i>';
-//$starImageOff = JHtml::_('image', 'system/rating_star_blank.png', JText::_('PLG_VOTE_STAR_INACTIVE'), null, true);
-$starImageOff  = '<i class="fa fa-star" title="' . JText::_('PLG_VOTE_STAR_INACTIVE') . '"></i>';
+//$starImageOn  = HTMLHelper::_('image', 'system/rating_star.png', Text::_('PLG_VOTE_STAR_ACTIVE'), null, true);
+$starImageOn  = '<i class="fa fa-star text-warning" title="' . Text::_('PLG_VOTE_STAR_ACTIVE') . '"></i>';
+//$starImageOff = HTMLHelper::_('image', 'system/rating_star_blank.png', Text::_('PLG_VOTE_STAR_INACTIVE'), null, true);
+$starImageOff  = '<i class="fa fa-star" title="' . Text::_('PLG_VOTE_STAR_INACTIVE') . '"></i>';
 
 $img = '';
 for ($i = 0; $i < $rating; $i++)
@@ -46,8 +46,8 @@ for ($i = $rating; $i < 5; $i++)
 
 ?>
 <div class="content_rating" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
-	<p class="unseen element-invisible">
-		<?php echo JText::sprintf('PLG_VOTE_USER_RATING', '<span itemprop="ratingValue">' . $rating . '</span>', '<span itemprop="bestRating">5</span>'); ?>
+	<p class="unseen visually-hidden">
+		<?php echo Text::sprintf('PLG_VOTE_USER_RATING', '<span itemprop="ratingValue">' . $rating . '</span>', '<span itemprop="bestRating">5</span>'); ?>
 		<meta itemprop="ratingCount" content="<?php echo (int) $row->rating_count; ?>" />
 		<meta itemprop="worstRating" content="0" />
 	</p>

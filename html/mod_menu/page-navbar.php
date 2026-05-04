@@ -33,7 +33,7 @@ if(strlen($class_sfx) > 0)
 
         <?php
 
-        require JModuleHelper::getLayoutPath('mod_menu', 'default');
+        require ModuleHelper::getLayoutPath('mod_menu', 'default');
         ?>
 
         </div>

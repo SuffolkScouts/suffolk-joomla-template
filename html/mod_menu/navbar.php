@@ -10,4 +10,4 @@
 defined('_JEXEC') or die;
 
 $class_sfx = $class_sfx . ' navbar-nav ml-auto';
-require JModuleHelper::getLayoutPath('mod_menu', 'default');
+require ModuleHelper::getLayoutPath('mod_menu', 'default');

@@ -9,7 +9,9 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('bootstrap.tooltip');
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 
 $article = $displayData['article'];
 $overlib = $displayData['overlib'];
@@ -17,9 +19,9 @@ $overlib = $displayData['overlib'];
 // @deprecated  4.0  The legacy icon flag will be removed from this layout in 4.0
 $legacy  = $displayData['legacy'];
 
-$currentDate   = JFactory::getDate()->format('Y-m-d H:i:s');
+$currentDate   = Factory::getDate()->format('Y-m-d H:i:s');
 $isUnpublished = ($article->publish_up > $currentDate)
-	|| ($article->publish_down < $currentDate && $article->publish_down !== JFactory::getDbo()->getNullDate());
+	|| ($article->publish_down < $currentDate && $article->publish_down !== Factory::getDbo()->getNullDate());
 
 if ($legacy)
 {
@@ -42,8 +44,8 @@ else
 
 ?>
 <?php if ($legacy) : ?>
-	<?php echo JHtml::_('image', 'system/' . $icon, JText::_('JGLOBAL_EDIT'), null, true); ?>
+	<?php echo HTMLHelper::_('image', 'system/' . $icon, Text::_('JGLOBAL_EDIT'), null, true); ?>
 <?php else : ?>
-	<span class="hasTooltip icon-<?php echo $icon; ?> tip" title="<?php echo JHtml::tooltipText(JText::_('COM_CONTENT_EDIT_ITEM'), $overlib, 0, 0); ?>"></span>
-	<?php echo JText::_('JGLOBAL_EDIT'); ?>
+	<span class="hasTooltip icon-<?php echo $icon; ?> tip" title="<?php echo HTMLHelper::tooltipText(Text::_('COM_CONTENT_EDIT_ITEM'), $overlib, 0, 0); ?>"></span>
+	<?php echo Text::_('JGLOBAL_EDIT'); ?>
 <?php endif; ?>

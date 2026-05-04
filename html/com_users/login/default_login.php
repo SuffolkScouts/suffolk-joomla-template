@@ -1,91 +1,63 @@
 <?php
-/**
- * @package     Joomla.Site
- * @subpackage  com_users
- *
- * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
- */
-
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.keepalive');
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Router\Route;
+
+HTMLHelper::_('behavior.keepalive');
 ?>
-<div class="login<?php echo $this->pageclass_sfx?>">
-	<?php if ($this->params->get('show_page_heading')) : ?>
-	<div class="page-header">
-		<h1>
-			<?php echo $this->escape($this->params->get('page_heading')); ?>
-		</h1>
-	</div>
-	<?php endif; ?>
+<div class="sf-login">
+    <?php if ($this->params->get('show_page_heading')) : ?>
+        <h1><?php echo $this->escape($this->params->get('page_heading')); ?></h1>
+    <?php endif; ?>
 
-	<?php if (($this->params->get('logindescription_show') == 1 && str_replace(' ', '', $this->params->get('login_description')) != '') || $this->params->get('login_image') != '') : ?>
-	<div class="login-description">
-	<?php endif; ?>
+    <?php if ($this->params->get('logindescription_show') == 1 && trim($this->params->get('login_description')) !== '') : ?>
+        <div class="sf-login__description"><?php echo $this->params->get('login_description'); ?></div>
+    <?php endif; ?>
 
-		<?php if ($this->params->get('logindescription_show') == 1) : ?>
-			<?php echo $this->params->get('login_description'); ?>
-		<?php endif; ?>
+    <?php if ($this->params->get('login_image') !== '') : ?>
+        <img src="<?php echo $this->escape($this->params->get('login_image')); ?>" class="sf-login__image" alt="<?php echo Text::_('COM_USERS_LOGIN_IMAGE_ALT'); ?>">
+    <?php endif; ?>
 
-		<?php if (($this->params->get('login_image') != '')) :?>
-			<img src="<?php echo $this->escape($this->params->get('login_image')); ?>" class="login-image" alt="<?php echo JText::_('COM_USERS_LOGIN_IMAGE_ALT')?>"/>
-		<?php endif; ?>
+    <form action="<?php echo Route::_('index.php?option=com_users&task=user.login'); ?>" method="post" class="sf-form">
+        <?php foreach ($this->form->getFieldset('credentials') as $field) : ?>
+            <?php if (!$field->hidden) : ?>
+                <div class="sf-form__group">
+                    <?php echo $field->label; ?>
+                    <?php echo $field->input; ?>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
 
-	<?php if (($this->params->get('logindescription_show') == 1 && str_replace(' ', '', $this->params->get('login_description')) != '') || $this->params->get('login_image') != '') : ?>
-	</div>
-	<?php endif; ?>
+        <?php if ($this->tfa) : ?>
+            <div class="sf-form__group">
+                <?php echo $this->form->getField('secretkey')->label; ?>
+                <?php echo $this->form->getField('secretkey')->input; ?>
+            </div>
+        <?php endif; ?>
 
-	<form action="<?php echo JRoute::_('index.php?option=com_users&task=user.login'); ?>" method="post" class="form-validate form-horizontal card">
+        <?php if (PluginHelper::isEnabled('system', 'remember')) : ?>
+            <div class="sf-form__check">
+                <input id="remember" type="checkbox" name="remember" value="yes">
+                <label for="remember"><?php echo Text::_('COM_USERS_LOGIN_REMEMBER_ME'); ?></label>
+            </div>
+        <?php endif; ?>
 
-		<div class="card-body">
-			<?php foreach ($this->form->getFieldset('credentials') as $field) : ?>
-				<?php if (!$field->hidden) : ?>
-					<div class="form-group">
-						<?php echo $field->label; ?>
-						<?php echo $field->input; ?>
-					</div>
-				<?php endif; ?>
-			<?php endforeach; ?>
+        <div class="sf-form__actions">
+            <button type="submit" class="sf-button sf-button--yellow sf-button--full">
+                <?php echo Text::_('JLOGIN'); ?>
+            </button>
+        </div>
 
-			<?php if ($this->tfa): ?>
-				<div class="form-group">
-					<?php echo $this->form->getField('secretkey')->label; ?>
-					<?php echo $this->form->getField('secretkey')->input; ?>
-				</div>
-			<?php endif; ?>
+        <input type="hidden" name="return" value="<?php echo base64_encode($this->params->get('login_redirect_url', $this->form->getValue('return'))); ?>">
+        <?php echo HTMLHelper::_('form.token'); ?>
+    </form>
 
-			<?php if (JPluginHelper::isEnabled('system', 'remember')) : ?>
-			<div  class="form-group form-check">
-				<input id="remember" type="checkbox" name="remember" class="inputbox form-check-input" value="yes"/>
-				<label for="remember" class="form-check-label"><?php echo JText::_('COM_USERS_LOGIN_REMEMBER_ME') ?></label>
-			</div>
-			<?php endif; ?>
-
-			<div class="form-group">
-				<div class="controls">
-					<button type="submit" class="btn btn-primary btn-block">
-                        <i class="fa fa-sign-in"></i> 
-						<?php echo JText::_('JLOGIN'); ?>
-					</button>
-				</div>
-			</div>
-
-			<input type="hidden" name="return" value="<?php echo base64_encode($this->params->get('login_redirect_url', $this->form->getValue('return'))); ?>" />
-			<?php echo JHtml::_('form.token'); ?>
-		</div>
-	</form>
-</div>
-<div class="login">
-	<ul class="nav nav-pills nav-fill">
-		<li class="nav-item">
-			<a class="nav-link" href="https://account.suffolkscouts.org.uk/forgotUsername">Forgot Username?</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="https://account.suffolkscouts.org.uk/forgotPassword">Forgot Password?</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="https://account.suffolkscouts.org.uk/request">Request an account</a>
-		</li>
-	</ul>
+    <nav class="sf-login__links" aria-label="<?php echo Text::_('COM_USERS_LOGIN_ACCOUNT_LINKS'); ?>">
+        <a href="https://account.suffolkscouts.org.uk/forgotUsername"><?php echo Text::_('COM_USERS_LOGIN_FORGOT_YOUR_USERNAME'); ?></a>
+        <a href="https://account.suffolkscouts.org.uk/forgotPassword"><?php echo Text::_('COM_USERS_LOGIN_FORGOT_YOUR_PASSWORD'); ?></a>
+        <a href="https://account.suffolkscouts.org.uk/request"><?php echo Text::_('COM_USERS_REGISTER_LINK'); ?></a>
+    </nav>
 </div>
