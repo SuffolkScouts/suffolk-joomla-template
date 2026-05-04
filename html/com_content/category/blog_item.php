@@ -26,7 +26,7 @@ if (!function_exists('sf_content_blog_image')) {
         }
 
         if ($image === '') {
-            return 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=1200&q=70&auto=format&fit=crop';
+            return Uri::root(true) . '/templates/suffolkdev/images/scouts-badge.svg';
         }
 
         $image = explode('#', $image, 2)[0];

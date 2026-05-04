@@ -172,7 +172,7 @@ function sfBuildNavigation(): array
 
 function sfIntroImageUrl(?string $images, string $base): string
 {
-    $fallback = 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=1200&q=70&auto=format&fit=crop';
+    $fallback = rtrim($base, '/') . '/templates/suffolkdev/images/scouts-badge.svg';
     $imageData = json_decode((string) $images);
     $image = '';
 
