@@ -26,7 +26,7 @@ if (!function_exists('sf_content_blog_image')) {
         }
 
         if ($image === '') {
-            return Uri::root(true) . '/templates/suffolkdev/images/scouts-badge.svg';
+            return Uri::root(true) . '/templates/' . Factory::getApplication()->getTemplate() . '/images/scouts-badge.svg';
         }
 
         $image = explode('#', $image, 2)[0];

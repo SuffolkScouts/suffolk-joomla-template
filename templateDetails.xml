@@ -6,7 +6,7 @@
     <author>Suffolk Scouts</author>
     <authorEmail>webmaster@suffolkscouts.org.uk</authorEmail>
     <copyright>Copyright (C) 2026 Suffolk Scouts</copyright>
-    <description>TPL_SUFFOLKDEV_XML_DESCRIPTION</description>
+    <description>TPL_SUFFOLKSCOUTS_XML_DESCRIPTION</description>
     <files>
         <filename>component.php</filename>
         <filename>error.php</filename>
@@ -33,21 +33,24 @@
         <position>debug</position>
     </positions>
     <languages folder="language">
-        <language tag="en-GB">en-GB/en-GB.tpl_suffolkdev.ini</language>
-        <language tag="en-GB">en-GB/en-GB.tpl_suffolkdev.sys.ini</language>
+        <language tag="en-GB">en-GB/en-GB.tpl_suffolkscouts.ini</language>
+        <language tag="en-GB">en-GB/en-GB.tpl_suffolkscouts.sys.ini</language>
     </languages>
     <config>
         <fields name="params">
             <fieldset name="advanced">
                 <field name="favicon" type="text" default=""
-                    label="TPL_SUFFOLKDEV_FAVICON"
-                    description="TPL_SUFFOLKDEV_FAVICON_DESC"
+                    label="TPL_SUFFOLKSCOUTS_FAVICON"
+                    description="TPL_SUFFOLKSCOUTS_FAVICON_DESC"
                     filter="string" />
                 <field name="customcss" type="text" default=""
-                    label="TPL_SUFFOLKDEV_CUSTOMCSS"
-                    description="TPL_SUFFOLKDEV_CUSTOMCSS_DESC"
+                    label="TPL_SUFFOLKSCOUTS_CUSTOMCSS"
+                    description="TPL_SUFFOLKSCOUTS_CUSTOMCSS_DESC"
                     filter="string" />
             </fieldset>
         </fields>
     </config>
+    <updateservers>
+        <server type="extension" name="Suffolk Scouts Template">https://raw.githubusercontent.com/SuffolkScouts/suffolk-joomla-template/main/update_endpoint.xml</server>
+    </updateservers>
 </extension>

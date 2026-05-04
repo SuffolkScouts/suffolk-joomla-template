@@ -170,9 +170,9 @@ function sfBuildNavigation(): array
     return $navigation;
 }
 
-function sfIntroImageUrl(?string $images, string $base): string
+function sfIntroImageUrl(?string $images, string $base, string $templateUrl): string
 {
-    $fallback = rtrim($base, '/') . '/templates/suffolkdev/images/scouts-badge.svg';
+    $fallback = rtrim($templateUrl, '/') . '/images/scouts-badge.svg';
     $imageData = json_decode((string) $images);
     $image = '';
 
@@ -208,7 +208,7 @@ function sfExcerpt(string $html, int $max = 150): string
     return $text;
 }
 
-function sfLatestNews(string $base): array
+function sfLatestNews(string $base, string $templateUrl): array
 {
     $db = Factory::getDbo();
     $newsCategoryQuery = $db->getQuery(true)
@@ -252,7 +252,7 @@ function sfLatestNews(string $base): array
         $date = $article->publish_up && $article->publish_up !== '0000-00-00 00:00:00' ? $article->publish_up : $article->created;
 
         $cards[] = [
-            'image' => sfIntroImageUrl($article->images, $base),
+            'image' => sfIntroImageUrl($article->images, $base, $templateUrl),
             'tag' => (string) $article->category_title,
             'date' => HTMLHelper::_('date', $date, 'd M Y'),
             'title' => (string) $article->title,
@@ -432,7 +432,7 @@ function sfFooterColumns(): array
 }
 
 $navItems = sfBuildNavigation();
-$newsCards = sfLatestNews($base);
+$newsCards = sfLatestNews($base, $templateUrl);
 $events = $isHome ? sfLatestEvents() : [];
 $calendarHref = $isHome ? sfJEventsCalendarHref() : '';
 $footerCols = sfFooterColumns();
