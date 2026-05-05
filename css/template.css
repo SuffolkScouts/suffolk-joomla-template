@@ -623,6 +623,19 @@ textarea {
   background-size: cover;
   color: #fff;
   padding: 18px;
+  text-decoration: none;
+}
+
+body.sf-site a.sf-photo-tile,
+body.sf-site a.sf-photo-tile:hover,
+body.sf-site a.sf-photo-tile:focus {
+  color: #fff;
+  text-decoration: none;
+}
+
+a.sf-photo-tile:hover::before,
+a.sf-photo-tile:focus::before {
+  background: linear-gradient(90deg, rgba(36, 16, 61, 0.78) 0%, rgba(36, 16, 61, 0.22) 68%);
 }
 
 .sf-photo-tile::before {

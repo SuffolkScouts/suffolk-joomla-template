@@ -294,6 +294,7 @@ tr:last-child td { border-bottom: none; }
   color: #fff;
   padding: 18px;
   border-radius: 6px;
+  text-decoration: none;
   /* Fallback colour when the image path isn't accessible inside the editor */
   background-color: var(--sf-purple);
 }
