@@ -118,6 +118,32 @@
       }
     });
 
+    // ---- Admin edit dropdowns (article / news-card cog buttons) ----
+    function closeAllDropdowns() {
+      document.querySelectorAll('.dropdown-menu.show').forEach(function (menu) {
+        menu.classList.remove('show');
+        var toggle = menu.closest('.btn-group') && menu.closest('.btn-group').querySelector('.dropdown-toggle');
+        if (toggle) toggle.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    document.addEventListener('click', function (e) {
+      var toggle = e.target.closest('.dropdown-toggle[data-bs-toggle="dropdown"]');
+      if (toggle) {
+        e.preventDefault();
+        var menu = toggle.closest('.btn-group') && toggle.closest('.btn-group').querySelector('.dropdown-menu');
+        if (!menu) return;
+        var isOpen = menu.classList.contains('show');
+        closeAllDropdowns();
+        if (!isOpen) {
+          menu.classList.add('show');
+          toggle.setAttribute('aria-expanded', 'true');
+        }
+      } else if (!e.target.closest('.dropdown-menu')) {
+        closeAllDropdowns();
+      }
+    });
+
     document.querySelectorAll('.control-group').forEach(function (group) {
       group.classList.add('form-group');
     });
