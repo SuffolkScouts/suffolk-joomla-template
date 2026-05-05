@@ -45,7 +45,7 @@ jobs:
                   <downloads>
                       <downloadurl type="full" format="zip">{url}</downloadurl>
                   </downloads>
-                  <targetplatform name="joomla" version="4\.*"/>
+                  <targetplatform name="joomla" version="[4-9].*"/>
               </update>""")
 
           with open('update_endpoint.xml', 'r') as f:
