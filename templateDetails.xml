@@ -23,6 +23,7 @@
         <folder>language</folder>
     </files>
     <positions>
+        <position>hero-tiles</position>
         <position>banner</position>
         <position>breadcrumbs</position>
         <position>sidebar-left</position>

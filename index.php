@@ -559,29 +559,7 @@ $footerCols = sfFooterColumns();
                             <a class="sf-button sf-button--outline-dark sf-button--large" href="/contact-us/suffolkvacancies">Volunteer with us</a>
                         </div>
                     </div>
-                    <div class="sf-photo-grid" aria-label="Suffolk Scouts activities">
-                        <div class="sf-photo-tile sf-photo-tile--water">
-                            <div>
-                                <span>On the water</span>
-                                <strong>Sailing &amp; paddlesports</strong>
-                            </div>
-                            <?php echo $arrow; ?>
-                        </div>
-                        <div class="sf-photo-tile sf-photo-tile--ground">
-                            <div>
-                                <span>On the ground</span>
-                                <strong>Hiking &amp; expeditions</strong>
-                            </div>
-                            <?php echo $arrow; ?>
-                        </div>
-                        <div class="sf-photo-tile sf-photo-tile--fire">
-                            <div>
-                                <span>Around the fire</span>
-                                <strong>Bushcraft &amp; camping</strong>
-                            </div>
-                            <?php echo $arrow; ?>
-                        </div>
-                    </div>
+                    <jdoc:include type="modules" name="hero-tiles" style="none" />
                 </div>
             </section>
 

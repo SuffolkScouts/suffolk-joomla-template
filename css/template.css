@@ -666,6 +666,9 @@ textarea {
   stroke: currentColor;
 }
 
+/* Background images are now set via inline style on each .sf-photo-tile
+   in the mod_custom module so admins can update them without touching CSS.
+   These modifier classes remain as fallbacks / convenience shortcuts. */
 .sf-photo-tile--water {
   background-image: url("/images/headers/scout-jumping-into-lake.jpg");
 }

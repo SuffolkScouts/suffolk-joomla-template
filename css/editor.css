@@ -269,3 +269,67 @@ tr:last-child td { border-bottom: none; }
   background: var(--sf-purple);
   color: #fff;
 }
+
+/* =========================================================
+   Hero activity tiles (sf-photo-grid / sf-photo-tile)
+   Mirrors template.css so the mod_custom editor preview
+   matches the frontend.
+   ========================================================= */
+
+.sf-photo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: repeat(3, 152px);
+  gap: 12px;
+}
+
+.sf-photo-tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  background-position: center;
+  background-size: cover;
+  color: #fff;
+  padding: 18px;
+  border-radius: 6px;
+  /* Fallback colour when the image path isn't accessible inside the editor */
+  background-color: var(--sf-purple);
+}
+
+.sf-photo-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(36,16,61,0.66) 0%, rgba(36,16,61,0.12) 68%);
+}
+
+.sf-photo-tile > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sf-photo-tile span {
+  display: block;
+  color: rgba(255,255,255,0.86);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.sf-photo-tile strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.sf-arrow {
+  flex: 0 0 auto;
+  color: #fff;
+  opacity: 0.9;
+}
