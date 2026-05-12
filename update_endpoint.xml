@@ -5,6 +5,18 @@
 	    <description>Suffolk Scouts Joomla Template</description>
 	    <element>suffolkscouts</element>
 	    <type>template</type>
+	    <version>2.0.4</version>
+	    <client>site</client>
+	    <downloads>
+	        <downloadurl type="full" format="zip">https://github.com/SuffolkScouts/suffolk-joomla-template/releases/download/v2.0.4/tpl_suffolkscouts.zip</downloadurl>
+	    </downloads>
+	    <targetplatform name="joomla" version="[4-9].*"/>
+	</update>
+	<update>
+	    <name>Suffolk Scouts</name>
+	    <description>Suffolk Scouts Joomla Template</description>
+	    <element>suffolkscouts</element>
+	    <type>template</type>
 	    <version>2.0.3</version>
 	    <client>site</client>
 	    <downloads>
