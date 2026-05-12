@@ -683,7 +683,7 @@ $footerCols = sfFooterColumns();
                 <?php endif; ?>
 
                 <div class="sf-footer__legal">
-                    <span>&copy; 2011 - <?php echo date('Y'); ?> Suffolk County Scout Council. All Rights Reserved.</span>
+                    <span>&copy; 2011 - <?php echo date('Y'); ?> Suffolk County Scout Council. Registered Charity No. 305682. All Rights Reserved.</span>
                     <span>
                         <a href="<?php echo Route::_('index.php?Itemid=2243'); ?>">Privacy</a>
                         <a href="<?php echo Route::_('index.php?Itemid=2242'); ?>">Data Protection</a>
